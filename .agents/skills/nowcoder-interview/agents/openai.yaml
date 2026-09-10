@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nowcoder AI Interview Collector"
+  short_description: "Collect and organize Agent and AI application interview posts"
+  default_prompt: "Use $nowcoder-interview to run the Nowcoder interview collection and organization workflow."
