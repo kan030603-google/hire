@@ -20,7 +20,8 @@ FONT_EAST_ASIA = "Microsoft YaHei"
 FONT_LATIN = "Arial"
 INK = "1F2328"
 MUTED = "666666"
-RULE = "555555"
+RULE = "000000"
+RULE_SIZE = 16
 PLACEHOLDER = "A6A6A6"
 
 
@@ -101,7 +102,7 @@ def set_cell_borders(cell, *, color: str = PLACEHOLDER, size: int = 8) -> None:
         node.set(qn("w:color"), color)
 
 
-def set_cell_bottom_border(cell, *, color: str = RULE, size: int = 10) -> None:
+def set_cell_bottom_border(cell, *, color: str = RULE, size: int = RULE_SIZE) -> None:
     tc_pr = cell._tc.get_or_add_tcPr()
     tc_borders = tc_pr.first_child_found_in("w:tcBorders")
     if tc_borders is None:
@@ -134,15 +135,37 @@ def set_raw_tc_border(tc, edge: str, *, color: str, size: int) -> None:
     node.set(qn("w:color"), color)
 
 
-def set_table_fixed(table) -> None:
+def set_table_fixed(table, widths_mm: tuple[float, ...]) -> None:
     table.autofit = False
-    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.alignment = WD_TABLE_ALIGNMENT.LEFT
     tbl_pr = table._tbl.tblPr
+
+    widths_twips = [int(Mm(width).twips) for width in widths_mm]
+    tbl_w = tbl_pr.find(qn("w:tblW"))
+    if tbl_w is None:
+        tbl_w = OxmlElement("w:tblW")
+        tbl_pr.insert(0, tbl_w)
+    tbl_w.set(qn("w:w"), str(sum(widths_twips)))
+    tbl_w.set(qn("w:type"), "dxa")
+
+    tbl_ind = tbl_pr.find(qn("w:tblInd"))
+    if tbl_ind is None:
+        tbl_ind = OxmlElement("w:tblInd")
+        tbl_pr.append(tbl_ind)
+    tbl_ind.set(qn("w:w"), "0")
+    tbl_ind.set(qn("w:type"), "dxa")
+
     layout = tbl_pr.find(qn("w:tblLayout"))
     if layout is None:
         layout = OxmlElement("w:tblLayout")
         tbl_pr.append(layout)
     layout.set(qn("w:type"), "fixed")
+
+    grid_columns = list(table._tbl.tblGrid.gridCol_lst)
+    if len(grid_columns) != len(widths_twips):
+        raise ValueError("Table grid does not match requested column widths")
+    for grid_column, width_twips in zip(grid_columns, widths_twips):
+        grid_column.set(qn("w:w"), str(width_twips))
 
 
 def clear_paragraph(paragraph) -> None:
@@ -181,7 +204,9 @@ def format_paragraph(
     pf.widow_control = True
 
 
-def add_bottom_border(paragraph, *, color: str = RULE, size: int = 10, space: int = 3) -> None:
+def add_bottom_border(
+    paragraph, *, color: str = RULE, size: int = RULE_SIZE, space: int = 3
+) -> None:
     p_pr = paragraph._p.get_or_add_pPr()
     p_bdr = p_pr.find(qn("w:pBdr"))
     if p_bdr is None:
@@ -234,8 +259,8 @@ def add_bullet(doc: Document, text: str, *, size: float = 10.3, after: float = 1
 
 def add_header_block(doc: Document, name: str, contact: str, first_heading: str) -> None:
     table = doc.add_table(rows=2, cols=3)
-    set_table_fixed(table)
     widths = (26.0, 108.0, 26.0)
+    set_table_fixed(table, widths)
     for row in table.rows:
         for cell, width in zip(row.cells, widths):
             set_cell_width(cell, width)
@@ -281,7 +306,9 @@ def add_header_block(doc: Document, name: str, contact: str, first_heading: str)
     photo_continuation_tc = heading_row._tr.tc_lst[-1]
     set_raw_tc_border(photo_continuation_tc, "start", color=PLACEHOLDER, size=8)
     set_raw_tc_border(photo_continuation_tc, "end", color=PLACEHOLDER, size=8)
-    set_raw_tc_border(photo_continuation_tc, "bottom", color=RULE, size=10)
+    set_raw_tc_border(
+        photo_continuation_tc, "bottom", color=RULE, size=RULE_SIZE
+    )
     photo_p = reset_cell_to_one_paragraph(photo)
     photo_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     set_run_font(photo_p.add_run("照片位置"), 8.0, color=MUTED)
@@ -309,8 +336,8 @@ def add_education_row(doc: Document, text: str) -> None:
     left, date = split_row(text)
     parts = [part.strip() for part in left.split("｜") if part.strip()]
     table = doc.add_table(rows=1, cols=2)
-    set_table_fixed(table)
     widths = (128.0, 32.0)
+    set_table_fixed(table, widths)
     for cell, width in zip(table.rows[0].cells, widths):
         set_cell_width(cell, width)
         set_cell_margins(cell, top=0, start=0, bottom=0, end=0)
@@ -338,24 +365,22 @@ def add_company_row(doc: Document, text: str) -> None:
     role = parts[-1] if len(parts) >= 2 else ""
     organization = "｜".join(parts[:-1]) if len(parts) >= 2 else left
 
-    table = doc.add_table(rows=1, cols=3)
-    set_table_fixed(table)
-    widths = (90.0, 39.0, 31.0)
+    table = doc.add_table(rows=1, cols=2)
+    widths = (128.0, 32.0)
+    set_table_fixed(table, widths)
     for cell, width in zip(table.rows[0].cells, widths):
         set_cell_width(cell, width)
         set_cell_margins(cell, top=0, start=0, bottom=0, end=0)
         cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
 
     org_p = table.cell(0, 0).paragraphs[0]
-    set_run_font(org_p.add_run(organization), 10.5, bold=True)
+    set_run_font(org_p.add_run(organization), 10.0, bold=True)
+    if role:
+        set_run_font(org_p.add_run("｜"), 10.0, bold=True)
+        set_run_font(org_p.add_run(role), 10.0)
     format_paragraph(org_p, before=0.8, after=1.4, line=15.4, keep_with_next=True)
 
-    role_p = table.cell(0, 1).paragraphs[0]
-    role_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    set_run_font(role_p.add_run(role), 10.3)
-    format_paragraph(role_p, before=0.8, after=1.4, line=15.4, keep_with_next=True)
-
-    date_p = table.cell(0, 2).paragraphs[0]
+    date_p = table.cell(0, 1).paragraphs[0]
     date_p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     set_run_font(date_p.add_run(date), 10.0)
     format_paragraph(date_p, before=0.8, after=1.4, line=15.4, keep_with_next=True)
@@ -366,8 +391,8 @@ def add_project_row(doc: Document, text: str) -> None:
     title = parts[0]
     role = parts[1] if len(parts) > 1 else ""
     table = doc.add_table(rows=1, cols=2)
-    set_table_fixed(table)
-    widths = (118.0, 42.0)
+    widths = (128.0, 32.0)
+    set_table_fixed(table, widths)
     for cell, width in zip(table.rows[0].cells, widths):
         set_cell_width(cell, width)
         set_cell_margins(cell, top=0, start=0, bottom=0, end=0)

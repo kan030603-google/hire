@@ -22,11 +22,8 @@ venv/
 *.tmp
 *.temp
 
-# Reproducible rendering, review, and backup artifacts
-/tmp/pdfs/
-/tmp/reviews/
-/tmp/**/renders*/
-/tmp/**/backups*/
+# Temporary workspace; reusable tooling belongs under /tools/
+/tmp/
 
 # Superseded resume layout variants (the canonical resume files stay tracked)
 /简历_优化排版*.docx

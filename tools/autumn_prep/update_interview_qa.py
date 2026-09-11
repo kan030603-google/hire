@@ -8,7 +8,7 @@ from pathlib import Path
 from docx import Document
 
 
-ROOT = Path(r"D:\Cache\Desktop\研一\hire")
+ROOT = Path(__file__).resolve().parents[2]
 OUTPUT = ROOT / "output" / "秋招准备材料"
 QUESTION_BANK = OUTPUT / "面试八股.md"
 BACKUP = ROOT / "tmp" / "autumn_prep" / "backups_before_interview_qa_20260909"
@@ -109,21 +109,24 @@ def update_doc(
         remove_paragraph(two_body)
         remove_paragraph(two_heading)
 
+    # Rebuild the generated supplement so the script is safe to rerun.
+    current_paragraphs = doc.paragraphs
+    source_index = next(
+        i for i, p in enumerate(current_paragraphs)
+        if p.style and p.style.name == "Heading 1" and p.text.strip() == "资料依据与表达边界"
+    )
+    supplement_index = next(
+        (i for i, p in enumerate(current_paragraphs) if "补充八股与项目映射" in p.text),
+        None,
+    )
+    if supplement_index is not None:
+        for paragraph in list(current_paragraphs[supplement_index:source_index]):
+            remove_paragraph(paragraph)
+
     source_heading = next(
         p for p in doc.paragraphs
         if p.style and p.style.name == "Heading 1" and p.text.strip() == "资料依据与表达边界"
     )
-
-    # Rebuild the generated supplement so the script is safe to rerun.
-    supplement_heading = next(
-        (p for p in doc.paragraphs if "补充八股与项目映射" in p.text),
-        None,
-    )
-    if supplement_heading is not None:
-        start = doc.paragraphs.index(supplement_heading)
-        end = doc.paragraphs.index(source_heading)
-        for paragraph in list(doc.paragraphs[start:end]):
-            remove_paragraph(paragraph)
 
     inserted = 0
     if spec["ids"]:
