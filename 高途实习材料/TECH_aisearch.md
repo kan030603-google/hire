@@ -1091,7 +1091,7 @@ session_history_str = "\n".join(
                                       {need: 考研数学备考, preference: 强化班}
 ```
 
-因此**历史 session 的压缩已经由 userprofile 完成**，本服务不需要重复做这件事。
+因此，历史 Session 的离线压缩由 userprofile 完成；本服务的高低水位机制只处理**当前 Session** 的陈旧轮次，两者职责不同。EventSummary 的在线向量召回仍是后续规划，不属于 V1 已实现能力。
 
 #### 改进后的上下文分层
 
@@ -1104,12 +1104,12 @@ session_history_str = "\n".join(
 │  - "用户多次询问褚佳麟（白马老师）的课程"                  │
 │  （几十条一句话，已高度压缩，token 成本低）                │
 │                                                          │
-│  [检索到的 EventSummary]  按 query 相关性召回，按需注入   │
+│  [EventSummary，规划能力]  按 query 相关性召回，按需注入  │
 │  - "上次 session：用户询问了白马老师的价格和班型"           │
 │  （全量存向量库，只有与当前 query 相关的才被召回注入）      │
 │                                                          │
-│  [当前 session 早期溢出]  在线压缩（防御性兜底）           │
-│  正常 session（5-10轮）不触发，token 超预算时才启用        │
+│  [当前 Session 陈旧轮次]  高水位触发，动态摘要至低水位     │
+│  近期轮次保留原文；高低水位差为后续对话预留 Token 空间    │
 ├──────────────────────────────────────────────────────────┤
 │  messages 数组（当前 session 近期轮次，原文）  ← P0       │
 │  {role: user,      content: 第N-4轮问题}                  │
@@ -1124,7 +1124,7 @@ session_history_str = "\n".join(
 |---|---|---|
 | 内容 | 提炼后的持久化用户事实 | 每个 session 的对话摘要 |
 | 数量 | 几十条，稳定 | 随历史 session 积累增长 |
-| 注入方式 | 全量注入 system prompt | 向量检索后按需注入 |
+| 注入方式 | V1 从离线 JSON 全量注入 system prompt | 规划向量检索后按需注入，V1 未实现 |
 | 原因 | 已高度压缩，token 成本可控 | 全量注入 token 成本随历史增长，且多数历史与当前无关 |
 
 #### 三个改进点
@@ -1154,6 +1154,10 @@ def count_tokens(text: str) -> int:
 
 `get_messages_for_llm(budget_tokens=2000)` 从最新轮往前累加，直到超出预算为止，返回 `(recent_messages, overflow_turns)`。
 
+**高低水位动态压缩机制**：上下文设置高水位与低水位两个 Token 阈值（`high_watermark > low_watermark`）。每轮请求先计算当前上下文 Token 水位；未超过高水位时保留原始会话，不触发压缩。超过高水位后，从最陈旧的会话轮次开始选择待压缩区间，压缩规模由“当前水位与低水位的差额”动态决定，直至预计上下文回落至低水位；近期轮次始终保留原文。
+
+高低水位之间的缓冲区为后续对话预留 Token 空间，避免上下文在阈值附近时每新增一轮就重复触发压缩。被选中的陈旧 Q&A 不直接丢弃，而是压缩为摘要继续参与当前 Session 的上下文构建。
+
 **P3：与 userprofile 联动**
 
 ```python
@@ -1162,16 +1166,14 @@ ctx_mgr.set_userprofile_context(
     fact_memories=[
         "用户备考考研数学，关注强化班和冲刺班",        # FactMemory.statement
     ],
-    past_session_summaries=[
-        "- 用户询问了褚佳麟（白马老师）的课程\n- 关注价格和报名方式",  # EventSummary.content
-    ]
+    # past_session_summaries 预留给后续 RAG 召回结果，V1 不传入
 )
 
 # build() 自动把上述数据整合进 system_addon
 system_addon, messages_history = ctx_mgr.build(session, budget_tokens=2000)
 ```
 
-对于当前 session 内超出预算的早期轮次，使用与 userprofile `event_summary.py` 相同的 prompt 逻辑在线压缩：输入 Q&A → 输出 2-4 条教育相关要点，非教育内容标记"无教育相关内容"跳过。两边行为对齐，历史数据处理逻辑一致。
+当当前 Session 的 Token 水位超过高水位时，动态选取足以覆盖水位差的陈旧轮次，并使用与 userprofile `event_summary.py` 相同的 Prompt 逻辑在线压缩：输入 Q&A → 输出 2-4 条教育相关要点，非教育内容标记“无教育相关内容”并跳过；压缩后上下文回落至低水位，近期轮次仍以原文保留。两边行为对齐，历史数据处理逻辑一致。
 
 #### 注意：V1 集成边界
 
@@ -1184,7 +1186,7 @@ userprofile 构建阶段 → data/demo_output/{user_key}.json
 
 未来 userprofile 提供在线 API 后，可直接在 session 开始时实时查询，无需离线文件中转。
 
-### 9.5 token 精准计数与预算切分
+### 9.5 Token 精准计数与高低水位压缩
 
 ```python
 # P2: 精准计数
@@ -1199,9 +1201,19 @@ recent_messages, overflow_turns = session.get_messages_for_llm(
 # overflow_turns  → 早于预算的轮次，传给 ctx_mgr 压缩
 ```
 
+高低水位压缩按以下顺序执行：
+
+1. 精确计算当前 Session 上下文的 Token 水位。
+2. 水位未超过高水位时，不压缩并继续保留原始轮次。
+3. 水位超过高水位时，固定保留近期轮次，从最早的陈旧轮次开始选择压缩范围。
+4. 根据“当前水位 - 低水位”动态确定需要释放的 Token 空间，将所选陈旧轮次压缩为摘要。
+5. 重新计算压缩后的 Token 水位；若仍高于低水位，继续向后扩展陈旧轮次的压缩范围。
+
+高、低水位均由配置提供，技术资料不固化具体阈值；核心不变量是“高水位负责触发、低水位负责回落、近期轮次保持原文”。
+
 ### 9.6 历史长度控制
 
-**双重限制**，防止上下文过长导致 token 超限：
+**双重硬限制**，用于在高低水位摘要压缩之外防止上下文继续增长导致 Token 超限：
 
 ```python
 def _trim_history(self):
@@ -1213,6 +1225,8 @@ def _trim_history(self):
     while self._estimate_tokens() > self.max_tokens and len(self.session_history) > 1:
         self.session_history.pop(0)
 ```
+
+上述轮次与 Token 上限是存储侧的最后防线；正常的模型上下文构建优先执行高低水位摘要压缩，以摘要替换陈旧轮次，而不是直接删除其信息。
 
 ### 9.7 三种历史格式
 
@@ -1950,8 +1964,10 @@ OpenAI API 有 context window 限制（通常 4k~128k tokens）。如果无限�
 
 **本系统方案**：
 - 轮次限制（默认 10 轮）
-- Token 数估算限制（默认 2000 tokens）
-- 当超限时删除最早的轮次（保留最近的上下文）
+- 精确统计当前 Session 的 Token 水位
+- 超过高水位后，按当前水位与低水位的差额动态选取最陈旧轮次进行摘要
+- 以摘要替换陈旧轮次并重新计数，必要时继续压缩直至回落到低水位
+- 始终保留近期轮次原文；轮次与 Token 硬上限仅作为最后防线
 
 ---
 

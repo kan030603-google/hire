@@ -14,7 +14,7 @@ from docx.oxml.ns import qn
 from docx.shared import Inches, Pt, RGBColor, Twips
 
 
-ROOT = Path(r"C:\Users\kan\OneDrive\Desktop\研一\秋招")
+ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "output" / "秋招准备材料"
 OUT.mkdir(parents=True, exist_ok=True)
 
@@ -631,9 +631,9 @@ def build_resume() -> Path:
 
     resume_row(doc, "高途教育集团｜用户研发部｜算法研发组", "2026.02 - 2026.04", "大模型应用开发实习生")
     resume_project(doc, "智能搜索对话系统", "核心成员", [
-        "参与 C 端主 App 搜索算法链路重构，覆盖 Query 标准化、实体证据收集、意图分类、动态检索路由、混合召回/重排和会话管理；将纯关键词、向量与 LLM 能力按成本和确定性分层。",
-        "建设 BERT 意图识别训练链路：融合约 1.4 万真实样本、实体标注与模板合成数据，使新增老师/课程等实体通过词典更新即可泛化；以类别权重、Focal Loss、Label Smoothing 改善长尾类和 hard case，并采用高置信本地模型、低置信轻量 LLM 回退。",
-        "重构上下文管理：近期轮次用 role-aware messages 保真，FactMemory 全量注入，EventSummary 通过 RAG 按需召回；结合 tiktoken、轮次上限与超预算摘要控制上下文成本。",
+        "面向公司 C 端主 App 搜索场景中的意图理解与多轮承接问题，深度参与算法链路重构，负责意图识别、检索/生成路由与上下文管理，形成从单轮查询理解到多轮对话承接的完整链路。",
+        "意图识别与路由侧，负责 BERT 训练，基于真实用户问句构建实体增强样本，使模型学习实体类型与句式；结合类别权重、Focal Loss 与 Label Smoothing 优化长尾及歧义样本，低置信分类由轻量 LLM 补判，再按最终意图分流至检索直返或模型生成。",
+        "上下文侧，设计基于 Token 预算的高低水位压缩机制，超过高水位后根据水位差动态压缩陈旧轮次直至回落到低水位，并保留近期对话原文；接入离线 FactMemory 补充长期事实，兼顾多轮承接与推理成本。",
     ])
     resume_project(doc, "用户画像与长期记忆", "负责人", [
         "从 0 到 1 设计离线画像/长期记忆 Pipeline，将多源行为统一为 HistoryEvent，经 session/天/周窗口生成 EventSummary，再增量抽取 FactMemory，并构建 L1 静态、L2 统计、L3 动态兴趣画像。",
@@ -966,7 +966,7 @@ def build_gaotu_search() -> Path:
         "Query 标准化、实体证据、分层意图识别、动态检索路由与多层上下文",
         "公司：高途教育集团  |  部门：用户研发部算法研发组  |  角色：核心成员  |  时间：2026.02 - 2026.04",
     )
-    add_callout(doc, "30 秒版本", "我参与了高途 C 端主 App 搜索链路重构。系统先做输入标准化和实体证据收集，再用高置信 BERT、低置信轻量 LLM 的分层意图识别决定是检索还是生成；检索侧按意图和实体构造动态 Filter，并用当前 Query、上下文和画像做乘法重排。我的重点还包括 BERT 训练链路和多层上下文：近期轮次保真、长期 FactMemory 注入、历史 EventSummary 按需 RAG，解决多轮指代与 token 成本。", "good")
+    add_callout(doc, "30 秒版本", "我深度参与了高途 C 端主 App 搜索算法链路重构，负责 BERT 意图识别、检索/生成路由与会话上下文管理。意图侧以高置信 BERT 为主、低置信轻量 LLM 补判，再按最终意图分流至检索结果直返或大模型生成；上下文侧基于 Token 预算设计高低水位压缩，动态压缩陈旧轮次并保留近期原文，同时注入离线 FactMemory 补充长期事实。", "good")
 
     add_heading(doc, "一、项目背景", 1)
     add_table(doc, ["用户输入", "难点", "系统处理"], [
@@ -980,11 +980,11 @@ def build_gaotu_search() -> Path:
 
     add_heading(doc, "二、我的工作", 1)
     add_bullets(doc, [
-        "参与六步算法主链重构：QueryProcessor -> EvidenceCollector -> Intent -> ResponseBuilder -> Retriever/LLM -> SessionManager。",
+        "深度参与搜索算法链路重构，负责 BERT 意图识别、基于最终意图的检索/生成路由与会话上下文管理。",
         "负责 BERT 意图识别训练链路：真实样本、实体增强、模板×实体、同义词与多轮上下文增强；WeightedTrainer 支持类别权重、Focal Loss、Label Smoothing。",
         "设计 BERT 高置信优先、轻量 LLM 低置信回退、规则仅演示兜底的分层架构，按文本/图片设置差异阈值。",
-        "负责上下文管理：把历史从普通字符串改为 role-aware messages，精确 token 计数，近期保真、超限摘要，并与用户画像/长期记忆联动。",
-        "参与基于意图和实体的动态 VectorDB Filter、当前/上下文/画像权重重排与检索/生成路由。",
+        "负责上下文管理：精确计算 Token 水位，超过高水位后动态压缩陈旧轮次直至回落到低水位，保留近期原文，并注入离线 FactMemory 补充长期事实。",
+        "负责基于最终意图的检索/生成路由：检索类结果直接返回，生成类进入回答 Prompt 与模型。",
     ])
     add_callout(doc, "生产与 Demo 边界", "技术文档来自对原项目算法主链的去基础设施化 Demo。生产服务还包含 Django、Apollo、Eureka、SkyWalking、数据库治理和上下游编排；Demo 可独立运行并自动降级，但不能把 Demo 本身说成完整生产服务。", "warn")
 
@@ -1027,13 +1027,13 @@ def build_gaotu_search() -> Path:
     add_heading(doc, "五、上下文工程", 1)
     add_table(doc, ["层", "内容", "注入方式", "原因"], [
         ["FactMemory", "稳定、浓缩的长期事实", "system context 全量", "量少、信息密"],
-        ["EventSummary", "历史 Session 摘要", "按当前 Query RAG", "数量随历史增长，多数不相关"],
+        ["EventSummary", "历史 Session 摘要", "规划按当前 Query RAG", "V1 未实现在线召回"],
         ["当前 Session 近期轮次", "原始 user/assistant 消息", "messages 保真", "支撑指代与连续对话"],
-        ["当前 Session 早期溢出", "超过预算的旧轮次", "在线摘要", "防 context overflow"],
+        ["当前 Session 陈旧轮次", "超过高水位后动态选择", "摘要至低水位", "保留近期原文并预留 Token 空间"],
     ], [1900, 2800, 2200, GUIDE_TABLE_WIDTH - 6900])
     add_bullets(doc, [
         "原实现把全部历史拼成普通字符串，角色信息丢失、token 估算粗糙、成本随轮次线性增长。",
-        "改为从最新轮向前累加，默认 2000-token 预算、保留近 5 轮，超预算部分用与离线 EventSummary 对齐的 Prompt 压缩。",
+        "采用高低水位机制：上下文超过高水位后，根据当前水位与低水位的差额动态选择陈旧轮次进行摘要，直至回落到低水位；近期轮次始终保留原文。",
         "Session 另有最多 10 轮与 token 上限的双重防线；tiktoken 不可用时才用字符估算。",
         "V1 用户画像是离线 per-user JSON，尚非在线 API；EventSummary embedding/RAG 是计划接入条件。",
     ])
@@ -1044,7 +1044,7 @@ def build_gaotu_search() -> Path:
         ["实体知识外置", "新实体更新词典即可生效", "词典覆盖不足时退回句式特征/LLM"],
         ["OR Filter + 乘法重排", "先保召回再保精度", "权重需离线/在线实验，不能长期手调"],
         ["可选依赖降级", "便于 Demo 移植和故障隔离", "能力退化必须显式记录"],
-        ["近期保真 + 历史摘要", "兼顾指代精度与 token 成本", "摘要可能损失细节，需要 RAG 补充"],
+        ["高低水位 + 近期保真", "批量压缩陈旧轮次并预留 Token 余量", "摘要可能损失细节，阈值需结合质量与成本调优"],
     ], [2500, 4000, GUIDE_TABLE_WIDTH - 6500])
 
     add_heading(doc, "七、面试高频问答", 1)
@@ -1058,14 +1058,14 @@ def build_gaotu_search() -> Path:
         ("为什么证据收集放在意图前？", "实体类型本身是强意图特征，能把业务知识从模型权重中外置；先有 evidence 再分类，再用 intent 指导检索。", None),
         ("为什么 Filter 用 OR？", "AND 容易因实体不一致召回为空；OR 先保留老师相关和学科相关候选，再用当前实体/上下文/画像的差异权重重排。", None),
         ("为什么用乘法重排？", "乘法保留基础相关性门槛，低相关结果再多业务 boost 也不容易被抬到顶部；加法可能让垃圾结果靠固定加分越级。", None),
-        ("上下文为什么不能全量拼接？", "角色丢失、token 线性增长、旧信息干扰当前意图。分层后近期轮次保真，长期事实全量，历史摘要按需召回，超预算再压缩。", None),
-        ("FactMemory 和 EventSummary 有何不同？", "FactMemory 是跨 Session 的稳定事实，量少可全量注入；EventSummary 是每次会话摘要，数量大、按 Query 相关性召回。", None),
+        ("上下文为什么不能全量拼接？", "Token 成本会随轮次线性增长，陈旧信息还会干扰当前意图。系统用高水位触发压缩，并按水位差动态摘要陈旧轮次直至回落到低水位；近期轮次保持原文，长期 FactMemory 作为浓缩事实补充。", None),
+        ("FactMemory 和 EventSummary 有何不同？", "FactMemory 是跨 Session 的稳定事实，量少，V1 可从离线 JSON 注入；EventSummary 是每次会话摘要，数量会持续增长，按 Query 在线召回仍属于后续规划。", None),
         ("如何评估系统？", "离线看实体识别、意图 per-class F1/校准、召回 NDCG/Recall@K；在线看回退率、首包、零结果率、搜索成功/点击/转化、多轮承接和成本，并按意图分桶。", None),
         ("有什么没有做完？", "技术资料没有给出完整线上意图准确率和消融结果；V1 画像是离线 JSON，EventSummary 在线向量召回尚是接入规划；Demo 的规则兜底不代表生产。", None),
     ])
 
     add_heading(doc, "八、两分钟项目陈述模板", 1)
-    add_para(doc, "高途 C 端搜索输入很杂，包括老师别名、拼音、产品功能、无实体知识问答和跨轮指代。纯关键词覆盖不足，纯向量难区分意图，纯 LLM 又有成本和时延。我们把链路拆成 Query 标准化、Evidence、Intent、检索路由和 Session 上下文。先通过全半角、繁简、拼音和分词清洗 Query，再用精确、token、模糊等多路证据识别业务实体；BERT 处理高置信样本，低置信回退轻量 LLM。BERT 训练上，我使用真实用户样本与实体增强，让模型学习实体类型而不是名字，并用类别权重、Focal Loss 和 Label Smoothing 处理长尾与 hard case。检索类意图按意图和实体构造动态 Filter，多个条件先 OR 保召回，再对当前 Query 实体、上下文实体和画像做乘法重排。多轮上下文方面，把原先的历史字符串改为 role-aware messages：FactMemory 作为稳定事实全量注入，EventSummary 按需 RAG，当前 Session 近期轮次保真，超预算部分摘要。这样整套方案把确定性、本地模型和 LLM 按成本分层，同时明确 Demo 与生产基础设施的边界。")
+    add_para(doc, "高途 C 端搜索需要同时处理多类查询意图与跨轮承接。我负责 BERT 意图识别训练、检索/生成路由和会话上下文管理。训练侧基于真实用户问句构建实体增强样本，让模型学习实体类型与句式，并用类别权重、Focal Loss 和 Label Smoothing 处理长尾与 hard case；推理时高置信采用 BERT 结果，低置信由轻量 LLM 补判。最终意图确定后，检索类直接返回召回结果，知识问答与对话类进入回答 Prompt 和生成模型。上下文侧按 Token 精确计数维护高低水位，超过高水位后根据水位差动态压缩陈旧轮次，直至回落到低水位，并始终保留近期原文；同时读取离线 FactMemory 补充长期事实。历史 EventSummary 在线召回仍是后续规划，不作为已实现能力表述。")
 
     add_sources(doc, [
         "高途实习材料/阚海_简历_27应届.pdf（职责与项目名称的第一参考）",
@@ -1398,8 +1398,8 @@ def build_tech_handbook() -> Path:
             ("为什么乘法 boost 可能有风险？", "多个实体连续相乘可能放大过度且分数失去可比性，需要上限、log-space 或学习排序；Filter OR 也可能扩大噪声。", "面试中主动给出离线 NDCG 与在线搜索成功率调参方案。"),
         ]),
         ("九、Context Engineering 与长期记忆", [
-            ("上下文应该如何分层？", "system/策略、当前 Query、近期原文轮次、Topic/Task 状态、长期事实、按需召回历史各自有不同优先级和生命周期。", "高途近期保真+FactMemory+EventSummary RAG；阿里 Task-scoped context。"),
-            ("为什么不能全量历史？", "成本和时延线性增长，旧信息干扰、隐私暴露、超窗截断不可控。应做预算、最近优先、摘要和检索。", "tiktoken 计数优先于字符估算。"),
+            ("上下文应该如何分层？", "system/策略、当前 Query、近期原文轮次、压缩摘要与长期事实具有不同优先级和生命周期；未实现的历史召回能力应明确标为规划。", "高途采用近期轮次保真、高低水位压缩和离线 FactMemory 注入；阿里采用 Task-scoped context。"),
+            ("为什么不能全量历史？", "成本和时延随轮次增长，旧信息还会干扰当前意图。高水位负责触发，低水位提供回落目标，按水位差动态压缩陈旧轮次并保留近期原文，可避免阈值附近频繁压缩。", "Token 精确计数优先于字符估算；轮次和 Token 硬上限只作最后防线。"),
             ("摘要会丢信息怎么办？", "原文保留权威存储，摘要带来源和时间；需要细节时 RAG 回源，关键 Task 状态不只存在自然语言摘要里。", "summary 不能替 checkpoint。"),
             ("长期记忆如何更新？", "先提取候选事实，再按类型/标签与旧事实做 ADD/SKIP/MERGE/REPLACE；保留 inactive 历史和来源，处理 TTL、删除与用户纠正。", "高途 FactMemory 协议。"),
             ("什么信息不该记？", "临时闲聊、敏感信息、未经确认推断、短期情绪和无长期价值内容；应按用途、同意、保留期与可删除性治理。", "教育未成年人场景尤其严格。"),
