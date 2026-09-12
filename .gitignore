@@ -31,3 +31,4 @@ venv/
 # Nowcoder collector runtime and smoke-test artifacts
 /nowcoder_agent_mvp/data/
 /nowcoder_agent_mvp/output/*smoke-test*.md
+/nowcoder_agent_mvp/output/.parts/

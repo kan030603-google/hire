@@ -1,0 +1,38 @@
+{
+  "name": "nowcoder-agent-ai-app-september-2026",
+  "source": {
+    "site": "nowcoder",
+    "sort": "最新",
+    "companyFilterMode": "source-ui-required",
+    "rejectUnfilteredQueries": true,
+    "categories": [
+      "软件开发 / 人工智能/算法",
+      "软件开发 / 后端开发"
+    ],
+    "companyRegistry": "companies.phase1.json"
+  },
+  "window": {
+    "timezone": "Asia/Shanghai",
+    "startInclusive": "2026-09-01",
+    "endInclusive": "2026-09-30",
+    "incrementalUntilMonthEnd": true
+  },
+  "deduplication": {
+    "url": true,
+    "contentFingerprint": true,
+    "crossCompany": true,
+    "crossCategory": true
+  },
+  "llm": {
+    "enabled": false,
+    "provider": "openai",
+    "apiKeyEnvironmentVariable": "OPENAI_API_KEY",
+    "preferBatch": true,
+    "tasks": [
+      "post-relevance-classification",
+      "question-extraction",
+      "semantic-deduplication",
+      "answer-synthesis"
+    ]
+  }
+}

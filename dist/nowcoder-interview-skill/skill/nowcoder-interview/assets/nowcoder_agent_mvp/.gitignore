@@ -1,0 +1,4 @@
+/data/
+/output/.parts/
+/output/*smoke-test*.md
+/scripts/__pycache__/
