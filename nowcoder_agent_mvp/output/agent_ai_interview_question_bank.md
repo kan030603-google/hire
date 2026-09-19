@@ -1,22 +1,20 @@
 # 2026 年 9 月 Agent / AI 应用研发面试题库
 
-## 采集范围与口径
+## 采集范围、审计统计与口径
 
-这是 **2026-09-01 至 2026-09-11（Asia/Shanghai）** 的月内快照，不是 9 月整月最终数据。采集严格使用牛客企业选择器、岗位二级分类与“最新”排序，没有退化为全站抓取。
+这是 **2026-09-01 至 2026-09-19（Asia/Shanghai）** 的月内累计题库，覆盖 **50 家公司 × 2 个岗位二级类别**（软件开发 / 人工智能/算法、软件开发 / 后端开发）。采集始终使用牛客企业选择器和“最新”排序，没有退化为全站关键词搜索。当前范围已完整覆盖；实际执行由历史 90 个采集单元与本轮 100 个增量单元组成。
 
-- 范围：45 个企业组 × 2 个岗位二级分类（软件开发 / 人工智能/算法、软件开发 / 后端开发），共 90 个采集单元。
-- 完成：90 个单元全部完成，未使用无企业条件的回退查询。DeepSeek 使用牛客企业联想返回的 `companyId=28846`；接口公司名末尾的不可见 `U+200C` 仅在严格相等前作为 Unicode 格式字符移除。
-- 原始候选：322 条；正文请求成功 321 条，其中 313 条正文非空；1 条请求失败。
-- 确定性清洗：保留 299 条、拒绝 23 条。拒绝原因包括正文缺失、日期缺失、标题明确指向其他企业及重复正文，原因可重叠。
-- 语义处理：191 篇帖子进入高召回抽取，共得到 1,156 条问题候选；经 Terra 复核、语义归并和 Sol 最终审稿，形成 **56 道核心题、289 次独立帖子出现记录，覆盖 117 篇唯一来源帖**。
+- 历史窗口（原 45 家公司，09-01 至 09-11）：322 条候选，正文请求成功 321 条，其中 313 条正文非空；确定性清洗保留 299 条；191 篇初筛相关帖子抽取 1,156 条问题候选。Sol 审核后形成 56 道核心题、289 次独立帖子出现记录、117 篇唯一来源帖。
+- 本轮增量（原 45 家公司 09-12 至 09-19；新增比亚迪、中国移动、中国联通、中国电信、深信服 09-01 至 09-19）：181 条候选，180 条正文非空、1 条正文为空；确定性清洗保留 171 条；118 篇初筛相关帖子抽取 829 条问题候选。Terra 终审前第二版声称保留 599 条、归并为 360 道核心题；本次 Sol 逐条回查来源正文后，保留 **518 条可定位且在范围内的问题记录**，归并为 **60 道本轮核心题、400 次独立帖子出现记录，覆盖 97 篇唯一来源帖**。
+- 累计：503 条候选、470 条 clean 正文、1,985 条抽取问题候选；累计清洗拒绝 33 条。最终形成 **68 道核心题、689 次独立帖子出现记录，覆盖 214 篇唯一来源帖**。
 
-“出现次数”按独立来源帖子计数，同一帖子重复提及只算一次。来源链接是面经证据；参考答案由模型结合通用工程实践整理，不代表来源帖作者的原话或特定企业的标准答案。
+“出现次数”按独立来源帖子计数：同一帖子对同一道核心题的重复提及只算一次。历史与本轮窗口不重叠，因此映射到同一核心题时可直接相加；公司取并集。来源链接仅作为面经证据，参考答案由模型基于通用工程实践整理，不代表原帖作者答案或企业标准答案。
 
 ## Agent 工程
 
 ### A1. 如何有结构地介绍 Agent 项目的业务目标、技术链路、设计取舍与落地效果？
-出现次数：18｜涉及企业：阿里巴巴、百度、哔哩哔哩、滴滴、科大讯飞、快手、美团、拼多多、腾讯、虾皮/Shopee、字节跳动、DeepSeek
-来源：[DeepSeek / 2026-09-08](https://www.nowcoder.com/discuss/1674285)、[阿里巴巴 / 2026-09-02](https://www.nowcoder.com/discuss/1672330)、[拼多多 / 2026-09-02](https://www.nowcoder.com/feed/main/detail/ee971b755cbd475a91ef62cee38cdac8)
+出现次数：24｜涉及企业：DeepSeek、华为、哔哩哔哩、字节跳动、快手、拼多多、滴滴、百度、科大讯飞、美团、腾讯、虾皮/Shopee、蚂蚁集团、阿里巴巴
+来源：[DeepSeek / 2026-09-08](https://www.nowcoder.com/discuss/1674285)、[阿里巴巴 / 2026-09-02](https://www.nowcoder.com/discuss/1672330)、[拼多多 / 2026-09-02](https://www.nowcoder.com/feed/main/detail/ee971b755cbd475a91ef62cee38cdac8)、[华为 / 2026-09-11](https://www.nowcoder.com/feed/main/detail/415f38423022461f87767cca1a0d48f2)、[快手 / 2026-09-16](https://www.nowcoder.com/feed/main/detail/5089cbce54834a7bb57ae2c69b7b9a89)、[美团 / 2026-09-15](https://www.nowcoder.com/feed/main/detail/50bcdc47e7754aa7be59b6318fea514b)
 
 参考答案：最清晰的讲法是“业务问题与指标—个人职责—核心链路—关键取舍—结果与复盘”，重点证明为什么需要 Agent、你具体做了什么，以及效果如何被验证。
 
@@ -32,8 +30,8 @@
 - （延伸）最关键的架构取舍是什么，数据如何证明选择正确？
 
 ### A2. 如何根据业务任务的确定性、链路长度与风险选择 Agent 架构？
-出现次数：15｜涉及企业：阿里巴巴、百度、哔哩哔哩、得物、美团、拼多多、虾皮/Shopee、字节跳动、OPPO
-来源：[百度 / 2026-09-07](https://www.nowcoder.com/discuss/1673653)、[OPPO / 2026-09-10](https://www.nowcoder.com/discuss/1674899)、[美团 / 2026-09-09](https://www.nowcoder.com/discuss/1674600)
+出现次数：20｜涉及企业：OPPO、哔哩哔哩、字节跳动、得物、拼多多、海康威视、百度、米哈游、美团、虾皮/Shopee、阿里巴巴
+来源：[百度 / 2026-09-07](https://www.nowcoder.com/discuss/1673653)、[OPPO / 2026-09-10](https://www.nowcoder.com/discuss/1674899)、[美团 / 2026-09-09](https://www.nowcoder.com/discuss/1674600)、[字节跳动 / 2026-09-14](https://www.nowcoder.com/discuss/1675663)、[米哈游 / 2026-09-16](https://www.nowcoder.com/discuss/1676222)、[百度 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/7eeffb48e3704250864b994adb9fc473)
 
 参考答案：架构应由任务的不确定性、依赖长度、风险和吞吐要求驱动：稳定可枚举的主干优先 Workflow，只在需要动态判断的局部引入 Agent。
 
@@ -49,8 +47,8 @@
 - （延伸）什么指标说明多 Agent 的协调成本已经超过收益？
 
 ### A3. 什么是 Agent Harness，它与 Agent 框架、Orchestrator 有何区别？
-出现次数：15｜涉及企业：百度、科大讯飞、快手、美团、腾讯、字节跳动
-来源：[字节跳动 / 2026-09-09](https://www.nowcoder.com/discuss/1674561)、[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674755)、[快手 / 2026-09-03](https://www.nowcoder.com/feed/main/detail/01f6fefc241042868c5e33e6bf60d1d6)
+出现次数：31｜涉及企业：华为、字节跳动、快手、深信服、百度、科大讯飞、网易、美团、腾讯
+来源：[字节跳动 / 2026-09-09](https://www.nowcoder.com/discuss/1674561)、[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674755)、[快手 / 2026-09-03](https://www.nowcoder.com/feed/main/detail/01f6fefc241042868c5e33e6bf60d1d6)、[深信服 / 2026-09-02](https://www.nowcoder.com/feed/main/detail/14b2c379ae434062a009aefea9fc5df9)、[华为 / 2026-09-18](https://www.nowcoder.com/feed/main/detail/204c3ada219744f09bac7bd82aee585f)、[字节跳动 / 2026-09-15](https://www.nowcoder.com/discuss/1675854)
 
 参考答案：Agent Harness 是包裹模型、让它在真实环境中可控执行任务的完整运行系统；框架是开发这些能力的组件集合，Orchestrator 主要负责流程和任务调度。
 
@@ -65,8 +63,8 @@
 - （延伸）代码生成场景中 Harness 最重要的三个模块是什么？
 
 ### A4. 如何定义 Agent，它与普通 LLM 调用和 Workflow 有何区别？
-出现次数：13｜涉及企业：阿里巴巴、百度、哔哩哔哩、华为、快手、美团、拼多多、字节跳动、MiniMax
-来源：[MiniMax / 2026-09-07](https://www.nowcoder.com/discuss/1673647)、[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674651)、[阿里巴巴 / 2026-09-08](https://www.nowcoder.com/feed/main/detail/ed25d2f60ddc4436b0139a7c52e62a61)
+出现次数：25｜涉及企业：MiniMax、京东、华为、哔哩哔哩、字节跳动、小红书、快手、拼多多、百度、美团、腾讯、虾皮/Shopee、阿里巴巴
+来源：[MiniMax / 2026-09-07](https://www.nowcoder.com/discuss/1673647)、[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674651)、[阿里巴巴 / 2026-09-08](https://www.nowcoder.com/feed/main/detail/ed25d2f60ddc4436b0139a7c52e62a61)、[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[字节跳动 / 2026-09-12](https://www.nowcoder.com/discuss/1675282)、[字节跳动 / 2026-09-16](https://www.nowcoder.com/discuss/1676094)
 
 参考答案：Agent 是围绕目标运行的状态化决策与执行闭环；普通 LLM 调用主要完成一次生成，Workflow 则由预先定义的节点和转移控制流程。
 
@@ -81,8 +79,8 @@
 - （延伸）如何用反事实用例验证系统具备动态决策能力？
 
 ### A5. 多 Agent 如何通信，如何保证协作结果的结构化与可靠性？
-出现次数：11｜涉及企业：阿里巴巴、百度、快手、美团、腾讯、虾皮/Shopee、字节跳动、DeepSeek
-来源：[DeepSeek / 2026-09-08](https://www.nowcoder.com/discuss/1674285)、[字节跳动 / 2026-09-07](https://www.nowcoder.com/discuss/1673650)、[美团 / 2026-09-09](https://www.nowcoder.com/discuss/1674600)
+出现次数：15｜涉及企业：DeepSeek、字节跳动、快手、拼多多、百度、美团、腾讯、虾皮/Shopee、阿里巴巴
+来源：[DeepSeek / 2026-09-08](https://www.nowcoder.com/discuss/1674285)、[字节跳动 / 2026-09-07](https://www.nowcoder.com/discuss/1673650)、[美团 / 2026-09-09](https://www.nowcoder.com/discuss/1674600)、[拼多多 / 2026-09-14](https://www.nowcoder.com/discuss/1675694)、[快手 / 2026-09-16](https://www.nowcoder.com/feed/main/detail/5089cbce54834a7bb57ae2c69b7b9a89)、[美团 / 2026-09-15](https://www.nowcoder.com/feed/main/detail/50bcdc47e7754aa7be59b6318fea514b)
 
 参考答案：多 Agent 应通过中心调度器和共享任务状态通信，以版本化的结构化消息作为协议；自然语言适合解释，不应成为唯一的机器接口。
 
@@ -98,8 +96,8 @@
 - （延伸）Schema 升级时怎样兼容仍在运行的旧 Agent？
 
 ### A6. Agent 生成代码或执行命令时，安全沙箱如何设计？
-出现次数：9｜涉及企业：百度、拼多多、字节跳动、OPPO
-来源：[拼多多 / 2026-09-04](https://www.nowcoder.com/discuss/1673093)、[百度 / 2026-09-09](https://www.nowcoder.com/discuss/1674602)、[OPPO / 2026-09-10](https://www.nowcoder.com/discuss/1674899)
+出现次数：11｜涉及企业：OPPO、字节跳动、拼多多、百度、阿里巴巴
+来源：[拼多多 / 2026-09-04](https://www.nowcoder.com/discuss/1673093)、[百度 / 2026-09-09](https://www.nowcoder.com/discuss/1674602)、[OPPO / 2026-09-10](https://www.nowcoder.com/discuss/1674899)、[阿里巴巴 / 2026-09-14](https://www.nowcoder.com/discuss/1675677)、[百度 / 2026-09-16](https://www.nowcoder.com/feed/main/detail/c7f00d0e48aa4017911b46ed928d15f3)
 
 参考答案：安全沙箱应采用默认拒绝、每任务短生命周期隔离，把文件、网络、进程、凭证和资源配额限制到任务所需的最小范围。
 
@@ -115,8 +113,8 @@
 - （延伸）容器隔离与微虚机隔离应如何取舍？
 
 ### A7. MCP 是什么，它解决什么问题？
-出现次数：9｜涉及企业：阿里巴巴、科大讯飞、快手、美团、拼多多、虾皮/Shopee
-来源：[拼多多 / 2026-09-02](https://www.nowcoder.com/feed/main/detail/ee971b755cbd475a91ef62cee38cdac8)、[阿里巴巴 / 2026-09-07](https://www.nowcoder.com/discuss/1673957)、[虾皮/Shopee / 2026-09-10](https://www.nowcoder.com/discuss/1674806)
+出现次数：16｜涉及企业：字节跳动、得物、快手、拼多多、百度、科大讯飞、美团、虾皮/Shopee、阿里巴巴
+来源：[拼多多 / 2026-09-02](https://www.nowcoder.com/feed/main/detail/ee971b755cbd475a91ef62cee38cdac8)、[阿里巴巴 / 2026-09-07](https://www.nowcoder.com/discuss/1673957)、[虾皮/Shopee / 2026-09-10](https://www.nowcoder.com/discuss/1674806)、[得物 / 2026-09-12](https://www.nowcoder.com/feed/main/detail/13fb5808e2fe4bb8b2117b6470dcb261)、[字节跳动 / 2026-09-17](https://www.nowcoder.com/discuss/1676414)、[字节跳动 / 2026-09-18](https://www.nowcoder.com/discuss/1676801)
 
 参考答案：MCP（Model Context Protocol）是模型应用连接外部工具、资源和提示模板的标准协议，核心价值是降低客户端与能力提供方之间的 N×M 集成成本，而不是替代业务 API。
 
@@ -131,8 +129,8 @@
 - （延伸）什么情况下直接封装 API 比引入 MCP 更合适？
 
 ### A8. 如何量化评估 Agent 的任务效果？
-出现次数：8｜涉及企业：阿里巴巴、百度、美团、拼多多、字节跳动
-来源：[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674651)、[字节跳动 / 2026-09-09](https://www.nowcoder.com/discuss/1674352)、[阿里巴巴 / 2026-09-04](https://www.nowcoder.com/discuss/1672999)
+出现次数：21｜涉及企业：京东、字节跳动、快手、拼多多、携程、深信服、滴滴、百度、米哈游、美团、腾讯、蚂蚁集团、阿里巴巴
+来源：[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674651)、[字节跳动 / 2026-09-09](https://www.nowcoder.com/discuss/1674352)、[阿里巴巴 / 2026-09-04](https://www.nowcoder.com/discuss/1672999)、[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[快手 / 2026-09-16](https://www.nowcoder.com/feed/main/detail/5089cbce54834a7bb57ae2c69b7b9a89)、[深信服 / 2026-09-09](https://www.nowcoder.com/discuss/1674606)
 
 参考答案：Agent 评测要同时量化最终业务结果、执行轨迹、工程效率与安全成本，并以每次成功任务的综合成本判断版本优劣。
 
@@ -148,8 +146,8 @@
 - （延伸）线下效果提升但线上指标下降时如何定位？
 
 ### A9. MCP、Skill 与 Function Calling 有什么区别？
-出现次数：8｜涉及企业：阿里巴巴、百度、快手、美团、拼多多、小红书、字节跳动
-来源：[小红书 / 2026-09-01](https://www.nowcoder.com/feed/main/detail/102f375fadb749f5803d4d977551fc89)、[拼多多 / 2026-09-02](https://www.nowcoder.com/feed/main/detail/ee971b755cbd475a91ef62cee38cdac8)、[阿里巴巴 / 2026-09-04](https://www.nowcoder.com/discuss/1672761)
+出现次数：23｜涉及企业：字节跳动、小红书、快手、拼多多、携程、深信服、百度、米哈游、美团、虾皮/Shopee、阿里巴巴
+来源：[小红书 / 2026-09-01](https://www.nowcoder.com/feed/main/detail/102f375fadb749f5803d4d977551fc89)、[拼多多 / 2026-09-02](https://www.nowcoder.com/feed/main/detail/ee971b755cbd475a91ef62cee38cdac8)、[阿里巴巴 / 2026-09-04](https://www.nowcoder.com/discuss/1672761)、[深信服 / 2026-09-02](https://www.nowcoder.com/feed/main/detail/14b2c379ae434062a009aefea9fc5df9)、[美团 / 2026-09-14](https://www.nowcoder.com/discuss/1675659)、[字节跳动 / 2026-09-12](https://www.nowcoder.com/discuss/1675282)
 
 参考答案：三者处于不同层次：Function Calling 是模型生成结构化调用意图的能力，MCP 是客户端与外部能力间的标准协议，Skill 是面向任务的可复用知识与流程封装。
 
@@ -164,8 +162,8 @@
 - （延伸）Skill 的版本、权限和依赖应如何治理？
 
 ### A10. 多 Agent 并发执行时，如何做资源隔离、状态一致性与冲突处理？
-出现次数：7｜涉及企业：阿里巴巴、百度、哔哩哔哩、拼多多
-来源：[阿里巴巴 / 2026-09-02](https://www.nowcoder.com/discuss/1672330)、[拼多多 / 2026-09-07](https://www.nowcoder.com/discuss/1673655)、[哔哩哔哩 / 2026-09-10](https://www.nowcoder.com/discuss/1674928)
+出现次数：9｜涉及企业：哔哩哔哩、字节跳动、拼多多、携程、百度、阿里巴巴
+来源：[阿里巴巴 / 2026-09-02](https://www.nowcoder.com/discuss/1672330)、[拼多多 / 2026-09-07](https://www.nowcoder.com/discuss/1673655)、[哔哩哔哩 / 2026-09-10](https://www.nowcoder.com/discuss/1674928)、[字节跳动 / 2026-09-16](https://www.nowcoder.com/discuss/1676094)、[携程 / 2026-09-13](https://www.nowcoder.com/discuss/1675401)
 
 参考答案：核心是避免多个 Agent 无协调地写同一可变状态：先按任务和资源切分所有权，不能切分时使用版本控制、幂等和单一提交者保证一致性。
 
@@ -181,8 +179,8 @@
 - （延伸）两个补丁文本不冲突但语义冲突时如何发现？
 
 ### A11. 如何设计并实现 MCP Server 与工具调用链路？
-出现次数：6｜涉及企业：阿里巴巴、百度、科大讯飞、小红书
-来源：[小红书 / 2026-09-01](https://www.nowcoder.com/feed/main/detail/102f375fadb749f5803d4d977551fc89)、[阿里巴巴 / 2026-09-10](https://www.nowcoder.com/feed/main/detail/1245fc5d1f974ac88add10c7bbffa3dc)、[百度 / 2026-09-02](https://www.nowcoder.com/discuss/1672364)
+出现次数：10｜涉及企业：字节跳动、小红书、百度、科大讯飞、美团、阿里巴巴
+来源：[小红书 / 2026-09-01](https://www.nowcoder.com/feed/main/detail/102f375fadb749f5803d4d977551fc89)、[阿里巴巴 / 2026-09-10](https://www.nowcoder.com/feed/main/detail/1245fc5d1f974ac88add10c7bbffa3dc)、[百度 / 2026-09-02](https://www.nowcoder.com/discuss/1672364)、[字节跳动 / 2026-09-18](https://www.nowcoder.com/discuss/1676801)、[美团 / 2026-09-12](https://www.nowcoder.com/feed/main/detail/91e3b76eabd140bdbed20dc43724b396)、[百度 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/eb3e3d371edf436da1d9a73493928736)
 
 参考答案：应把 MCP Server 设计为“协议适配层 + 受控执行层”，完整链路是能力发现、模型产生调用意图、Host 校验并执行、结果回填模型，而不是让模型直接访问后端。
 
@@ -198,8 +196,8 @@
 - （延伸）工具 Schema 发生不兼容变更时如何灰度升级？
 
 ### A12. 什么场景适合多 Agent，它相比单 Agent 的收益与代价是什么？
-出现次数：5｜涉及企业：阿里巴巴、百度、快手、拼多多、腾讯
-来源：[快手 / 2026-09-07](https://www.nowcoder.com/discuss/1673857)、[腾讯 / 2026-09-10](https://www.nowcoder.com/feed/main/detail/19d5ea0eda0e40de8a060ac516703c58)、[阿里巴巴 / 2026-09-08](https://www.nowcoder.com/feed/main/detail/a11a3a9e0d824969b44db5bb2149ef9f)
+出现次数：9｜涉及企业：字节跳动、小红书、快手、拼多多、百度、美团、腾讯、阿里巴巴
+来源：[快手 / 2026-09-07](https://www.nowcoder.com/discuss/1673857)、[腾讯 / 2026-09-10](https://www.nowcoder.com/feed/main/detail/19d5ea0eda0e40de8a060ac516703c58)、[阿里巴巴 / 2026-09-08](https://www.nowcoder.com/feed/main/detail/a11a3a9e0d824969b44db5bb2149ef9f)、[字节跳动 / 2026-09-14](https://www.nowcoder.com/discuss/1675663)、[字节跳动 / 2026-09-12](https://www.nowcoder.com/discuss/1675282)、[小红书 / 2026-09-18](https://www.nowcoder.com/feed/main/detail/c712eda7fbf44ba69835b6dd2ff7fc4c)
 
 参考答案：只有任务存在可独立并行的子目标、显著不同的专业上下文或权限边界，并且收益覆盖协调成本时，多 Agent 才优于单 Agent。
 
@@ -214,8 +212,8 @@
 - （延伸）如何设计单 Agent 与多 Agent 的公平消融实验？
 
 ### A13. LLM 返回非法 Tool Call 时如何校验、修复与降级？
-出现次数：5｜涉及企业：美团、字节跳动
-来源：[字节跳动 / 2026-09-08](https://www.nowcoder.com/discuss/1674275)、[美团 / 2026-09-04](https://www.nowcoder.com/discuss/1673092)
+出现次数：15｜涉及企业：京东、字节跳动、快手、拼多多、滴滴、美团、蚂蚁集团
+来源：[字节跳动 / 2026-09-08](https://www.nowcoder.com/discuss/1674275)、[美团 / 2026-09-04](https://www.nowcoder.com/discuss/1673092)、[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[字节跳动 / 2026-09-15](https://www.nowcoder.com/discuss/1675854)、[拼多多 / 2026-09-14](https://www.nowcoder.com/discuss/1675694)
 
 参考答案：非法 Tool Call 必须在执行前由确定性校验器拦截；仅对可修复错误给模型有限次重试，越权与高风险请求直接拒绝，最后走澄清、替代工具或安全失败。
 
@@ -231,8 +229,8 @@
 - （延伸）如何避免错误重试造成重复副作用？
 
 ### A14. MCP 的核心抽象、交互协议与传输方式是什么？
-出现次数：5｜涉及企业：阿里巴巴、美团、拼多多
-来源：[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674652)、[拼多多 / 2026-09-03](https://www.nowcoder.com/feed/main/detail/2109cf8eb0254507911fbf86bcbf51e4)、[阿里巴巴 / 2026-09-08](https://www.nowcoder.com/discuss/1674026)
+出现次数：7｜涉及企业：字节跳动、拼多多、网易、美团、阿里巴巴
+来源：[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674652)、[拼多多 / 2026-09-03](https://www.nowcoder.com/feed/main/detail/2109cf8eb0254507911fbf86bcbf51e4)、[阿里巴巴 / 2026-09-08](https://www.nowcoder.com/discuss/1674026)、[字节跳动 / 2026-09-17](https://www.nowcoder.com/discuss/1676554)、[网易 / 2026-09-17](https://www.nowcoder.com/discuss/1676426)
 
 参考答案：MCP 以 Host、Client、Server 划分职责，以 tools、resources、prompts 等能力抽象对外暴露，并通过带版本与能力协商的会话交互。
 
@@ -247,8 +245,8 @@
 - （延伸）Streamable HTTP 与传统 SSE 方案的关系是什么？
 
 ### A15. 如何评测一个 Skill 的真实效果？
-出现次数：4｜涉及企业：快手、美团、字节跳动
-来源：[快手 / 2026-09-07](https://www.nowcoder.com/discuss/1673857)、[字节跳动 / 2026-09-10](https://www.nowcoder.com/discuss/1674903)、[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674651)
+出现次数：5｜涉及企业：字节跳动、快手、携程、美团
+来源：[快手 / 2026-09-07](https://www.nowcoder.com/discuss/1673857)、[字节跳动 / 2026-09-10](https://www.nowcoder.com/discuss/1674903)、[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674651)、[携程 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/781cfc04e3bc4697acf0a5c913543a28)
 
 参考答案：评测 Skill 不能只看最终文本观感，应比较“无 Skill、旧版本、新版本”在同一分层数据集上的任务成功率、过程质量和单位成功成本。
 
@@ -263,8 +261,8 @@
 - （延伸）如何证明收益来自 Skill，而不是底层模型升级？
 
 ### A16. Agent 动态工作流平台如何实现？
-出现次数：4｜涉及企业：阿里巴巴、百度、美团、字节跳动
-来源：[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674651)、[百度 / 2026-09-01](https://www.nowcoder.com/feed/main/detail/22468da481974784bb19116f5b0134c1)、[字节跳动 / 2026-09-03](https://www.nowcoder.com/feed/main/detail/bdebbb6088b6405e9eb2bd2c345acb6e)
+出现次数：9｜涉及企业：字节跳动、拼多多、携程、百度、美团、蚂蚁集团、阿里巴巴
+来源：[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674651)、[百度 / 2026-09-01](https://www.nowcoder.com/feed/main/detail/22468da481974784bb19116f5b0134c1)、[字节跳动 / 2026-09-03](https://www.nowcoder.com/feed/main/detail/bdebbb6088b6405e9eb2bd2c345acb6e)、[携程 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/2b1c35eace4a4bb3bd88ee669f163793)、[美团 / 2026-09-15](https://www.nowcoder.com/feed/main/detail/50bcdc47e7754aa7be59b6318fea514b)、[蚂蚁集团 / 2026-09-15](https://www.nowcoder.com/discuss/1675884)
 
 参考答案：动态工作流平台应以版本化图和持久状态为骨架，把模型决策限制在明确节点中，并让每一步都可校验、重放、暂停与恢复。
 
@@ -280,8 +278,8 @@
 - （延伸）如何证明某个动态节点确实需要 Agent 而不是规则？
 
 ### A17. Skill 的完整执行链路与异常兜底如何设计？
-出现次数：4｜涉及企业：百度、快手、美团、字节跳动
-来源：[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674755)、[字节跳动 / 2026-09-03](https://www.nowcoder.com/feed/main/detail/bdebbb6088b6405e9eb2bd2c345acb6e)、[快手 / 2026-09-07](https://www.nowcoder.com/discuss/1673857)
+出现次数：12｜涉及企业：DeepSeek、字节跳动、快手、携程、百度、米哈游、美团
+来源：[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674755)、[字节跳动 / 2026-09-03](https://www.nowcoder.com/feed/main/detail/bdebbb6088b6405e9eb2bd2c345acb6e)、[快手 / 2026-09-07](https://www.nowcoder.com/discuss/1673857)、[美团 / 2026-09-14](https://www.nowcoder.com/discuss/1675659)、[字节跳动 / 2026-09-12](https://www.nowcoder.com/discuss/1675282)、[米哈游 / 2026-09-16](https://www.nowcoder.com/discuss/1676222)
 
 参考答案：Skill 应被实现为可路由、可校验、可中断和可恢复的受控流程，每个阶段都有明确输入输出契约与失败边界。
 
@@ -297,8 +295,8 @@
 - （延伸）Skill 依赖升级导致行为变化时如何回滚？
 
 ### A18. 如何保证 Agent 输出 JSON 满足下游 Schema？
-出现次数：3｜涉及企业：联想、美团
-来源：[美团 / 2026-09-03](https://www.nowcoder.com/discuss/1672746)、[联想 / 2026-09-05](https://www.nowcoder.com/discuss/1673119)
+出现次数：8｜涉及企业：快手、拼多多、深信服、美团、联想、腾讯、蚂蚁集团
+来源：[美团 / 2026-09-03](https://www.nowcoder.com/discuss/1672746)、[联想 / 2026-09-05](https://www.nowcoder.com/discuss/1673119)、[拼多多 / 2026-09-14](https://www.nowcoder.com/discuss/1675694)、[蚂蚁集团 / 2026-09-15](https://www.nowcoder.com/discuss/1675884)、[腾讯 / 2026-09-17](https://www.nowcoder.com/discuss/1676372)
 
 参考答案：应优先使用模型原生结构化输出或受约束解码，再以服务端 JSON Schema 做最终裁决；Prompt 示例只能降低错误率，不能成为下游契约。
 
@@ -314,8 +312,8 @@
 - （延伸）Schema 演进时怎样保证新旧生产者和消费者兼容？
 
 ### A19. 如何理解 DeepSeek Harness 的设计与实现？
-出现次数：3｜涉及企业：百度、字节跳动
-来源：[字节跳动 / 2026-09-06](https://www.nowcoder.com/discuss/1673383)、[百度 / 2026-09-02](https://www.nowcoder.com/feed/main/detail/c47a8d2b35ff42779ed874b8145edb01)
+出现次数：8｜涉及企业：字节跳动、深信服、百度、美团、阿里巴巴
+来源：[字节跳动 / 2026-09-06](https://www.nowcoder.com/discuss/1673383)、[百度 / 2026-09-02](https://www.nowcoder.com/feed/main/detail/c47a8d2b35ff42779ed874b8145edb01)、[美团 / 2026-09-14](https://www.nowcoder.com/discuss/1675659)、[深信服 / 2026-09-09](https://www.nowcoder.com/discuss/1674606)、[字节跳动 / 2026-09-18](https://www.nowcoder.com/discuss/1676803)
 
 参考答案：回答前应先确认“DeepSeek Harness”指向的具体项目和版本，再从模型外围的上下文、工具、执行环境、反馈闭环与治理能力拆解，避免把品牌、模型和社区实现混为一谈。
 
@@ -330,8 +328,8 @@
 - （延伸）如何区分 DeepSeek 模型本身和 Harness 带来的效果提升？
 
 ### A20. 高并发 Agent 服务如何设计限流、背压、降级与熔断？
-出现次数：2｜涉及企业：阿里巴巴
-来源：[阿里巴巴 / 2026-09-08](https://www.nowcoder.com/discuss/1674277)、[阿里巴巴 / 2026-09-08](https://www.nowcoder.com/discuss/1674276)
+出现次数：9｜涉及企业：京东、字节跳动、快手、携程、百度、网易、阿里巴巴
+来源：[阿里巴巴 / 2026-09-08](https://www.nowcoder.com/discuss/1674277)、[阿里巴巴 / 2026-09-08](https://www.nowcoder.com/discuss/1674276)、[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[网易 / 2026-09-14](https://www.nowcoder.com/discuss/1675674)、[快手 / 2026-09-16](https://www.nowcoder.com/feed/main/detail/5089cbce54834a7bb57ae2c69b7b9a89)
 
 参考答案：高并发 Agent 服务应通过分层限流、有限队列和资源池隔离把过载挡在边界内，并以任务优先级和剩余预算选择降级，而不是让请求无界堆积。
 
@@ -347,8 +345,8 @@
 - （延伸）怎样避免超时重试进一步放大流量洪峰？
 
 ### A21. 如何防止 Agent 越权调用工具？
-出现次数：2｜涉及企业：快手、拼多多
-来源：[快手 / 2026-09-06](https://www.nowcoder.com/discuss/1673518)、[拼多多 / 2026-09-03](https://www.nowcoder.com/feed/main/detail/2109cf8eb0254507911fbf86bcbf51e4)
+出现次数：8｜涉及企业：快手、拼多多、携程、滴滴、美团、蚂蚁集团、阿里巴巴
+来源：[快手 / 2026-09-06](https://www.nowcoder.com/discuss/1673518)、[拼多多 / 2026-09-03](https://www.nowcoder.com/feed/main/detail/2109cf8eb0254507911fbf86bcbf51e4)、[携程 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/2b1c35eace4a4bb3bd88ee669f163793)、[美团 / 2026-09-12](https://www.nowcoder.com/feed/main/detail/91e3b76eabd140bdbed20dc43724b396)、[阿里巴巴 / 2026-09-14](https://www.nowcoder.com/discuss/1675677)
 
 参考答案：安全边界必须位于模型之外：Agent 只能提出调用意图，独立策略执行点依据当前用户、任务、工具和具体参数做最小权限授权。
 
@@ -364,8 +362,8 @@
 - （延伸）如何防止只在工具级授权却在参数级发生越权？
 
 ### A22. 如何评估 AI 辅助开发或代码修复是否达到预期？
-出现次数：2｜涉及企业：美团、顺丰
-来源：[顺丰 / 2026-09-03](https://www.nowcoder.com/feed/main/detail/ffd9a8d12a724e168eb4cdef8a6eca09)、[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674652)
+出现次数：27｜涉及企业：DeepSeek、Momenta、OPPO、京东、华为、字节跳动、携程、智谱AI、深信服、科大讯飞、美团、腾讯、虾皮/Shopee、蚂蚁集团、阿里巴巴、顺丰
+来源：[顺丰 / 2026-09-03](https://www.nowcoder.com/feed/main/detail/ffd9a8d12a724e168eb4cdef8a6eca09)、[美团 / 2026-09-10](https://www.nowcoder.com/discuss/1674652)、[携程 / 2026-09-12](https://www.nowcoder.com/feed/main/detail/0829b30b5e4040ff91b3827ec1b53584)、[腾讯 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/0f48b7645a90434c8ab495a6073f3e03)、[深信服 / 2026-09-02](https://www.nowcoder.com/feed/main/detail/14b2c379ae434062a009aefea9fc5df9)
 
 参考答案：主指标应是补丁能否在不引入回归与安全风险的前提下满足需求；编译通过或单个测试通过只属于基础门槛。
 
@@ -380,8 +378,8 @@
 - （延伸）代码 Agent 的离线指标与线上采纳率为什么可能背离？
 
 ### A23. Agent 架构如何分层，层间职责与接口如何设计？
-出现次数：2｜涉及企业：百度、DeepSeek
-来源：[百度 / 2026-09-08](https://www.nowcoder.com/discuss/1674282)、[DeepSeek / 2026-09-08](https://www.nowcoder.com/discuss/1674285)
+出现次数：24｜涉及企业：DeepSeek、京东、字节跳动、小红书、拼多多、深信服、滴滴、百度、网易、美团、蚂蚁集团、阿里巴巴、顺丰
+来源：[百度 / 2026-09-08](https://www.nowcoder.com/discuss/1674282)、[DeepSeek / 2026-09-08](https://www.nowcoder.com/discuss/1674285)、[字节跳动 / 2026-09-14](https://www.nowcoder.com/discuss/1675663)、[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[网易 / 2026-09-14](https://www.nowcoder.com/discuss/1675674)
 
 参考答案：推荐将 Agent 系统分为接入与策略、Agent Runtime、工具执行、状态数据和观测治理五层，各层通过版本化契约交互，模型不能跨层绕过安全控制。
 
@@ -397,8 +395,8 @@
 - （延伸）哪些策略必须在 Runtime 之外强制执行？
 
 ### A24. 如何在 ReAct 与 Plan-and-Execute 之间做架构选择，并扩展到长链路任务？
-出现次数：1｜涉及企业：DeepSeek
-来源：[DeepSeek / 2026-09-08](https://www.nowcoder.com/discuss/1674285)
+出现次数：8｜涉及企业：DeepSeek、MiniMax、字节跳动、拼多多、美团
+来源：[DeepSeek / 2026-09-08](https://www.nowcoder.com/discuss/1674285)、[拼多多 / 2026-09-14](https://www.nowcoder.com/discuss/1675694)、[字节跳动 / 2026-09-17](https://www.nowcoder.com/discuss/1676414)、[MiniMax / 2026-09-12](https://www.nowcoder.com/discuss/1675296)
 
 参考答案：ReAct 适合环境不确定、需要逐步观察的短任务；Plan-and-Execute 适合步骤较长、可并行且需要里程碑审查的任务，长链路生产系统通常采用“顶层计划 + 子任务内 ReAct”的混合方式。
 
@@ -414,8 +412,8 @@
 - （延伸）ReAct 的无进展循环如何检测和终止？
 
 ### A25. 长时间 Agent 任务如何支持取消、中断与资源回收？
-出现次数：1｜涉及企业：阿里巴巴
-来源：[阿里巴巴 / 2026-09-01](https://www.nowcoder.com/discuss/1672167)
+出现次数：2｜涉及企业：滴滴、阿里巴巴
+来源：[阿里巴巴 / 2026-09-01](https://www.nowcoder.com/discuss/1672167)、[滴滴 / 2026-09-14](https://www.nowcoder.com/discuss/1675675)
 
 参考答案：取消应被设计成贯穿 API、调度器、执行器与工具的持久状态，而不是仅断开前端连接；系统要在安全点停止、保存进度并确定性回收资源。
 
@@ -431,8 +429,8 @@
 - （延伸）进程崩溃后如何保证孤儿沙箱最终被回收？
 
 ### A26. Agent 灰度发布时如何发现异常并回退？
-出现次数：1｜涉及企业：快手
-来源：[快手 / 2026-09-01](https://www.nowcoder.com/feed/main/detail/3526c4c9bf1c4b80acdfa9ee7bacd548)
+出现次数：4｜涉及企业：京东、快手、百度、虾皮/Shopee
+来源：[快手 / 2026-09-01](https://www.nowcoder.com/feed/main/detail/3526c4c9bf1c4b80acdfa9ee7bacd548)、[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[百度 / 2026-09-16](https://www.nowcoder.com/feed/main/detail/4f6c877d6c8843d78d5f7e5926dd2fde)、[虾皮/Shopee / 2026-09-13](https://www.nowcoder.com/discuss/1675408)
 
 参考答案：灰度发布要用版本化制品、稳定分流和预设守护指标，把停止与回退条件写入发布系统，而不能让 Agent 自己判断自己是否异常。
 
@@ -465,8 +463,8 @@
 - （延伸）一个任务耗尽资源时如何保护其他任务？
 
 ### A28. DeepSeek Harness 与 LangChain 的本质区别及适用边界是什么？
-出现次数：1｜涉及企业：DeepSeek
-来源：[DeepSeek / 2026-09-08](https://www.nowcoder.com/discuss/1674285)
+出现次数：10｜涉及企业：DeepSeek、字节跳动、拼多多、深信服、美团、阿里巴巴
+来源：[DeepSeek / 2026-09-08](https://www.nowcoder.com/discuss/1674285)、[深信服 / 2026-09-02](https://www.nowcoder.com/feed/main/detail/14b2c379ae434062a009aefea9fc5df9)、[拼多多 / 2026-09-14](https://www.nowcoder.com/discuss/1675694)、[美团 / 2026-09-15](https://www.nowcoder.com/feed/main/detail/50bcdc47e7754aa7be59b6318fea514b)
 
 参考答案：二者不能简单视为同层替代品：这里的 DeepSeek Harness 应按具体实现理解为面向 Agent 运行时与执行闭环的系统，而 LangChain 更偏通用应用开发框架；必须先确认被比较的版本与模块范围。
 
@@ -481,188 +479,299 @@
 - （延伸）如何用消融实验比较 Harness 与框架各自贡献？
 - （延伸）什么情况下应从 LangChain 抽象下沉到自研 Runtime？
 
+### A29. Agent Loop 如何设置停止条件并避免死循环？
+出现次数：8｜涉及企业：字节跳动、海康威视、科大讯飞、美团、腾讯、虾皮/Shopee
+来源：[腾讯 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/0f48b7645a90434c8ab495a6073f3e03)、[美团 / 2026-09-14](https://www.nowcoder.com/discuss/1675659)、[科大讯飞 / 2026-09-14](https://www.nowcoder.com/feed/main/detail/671d2fa1d7c04322837ee1f5788dd69d)
+
+参考答案：Agent Loop 必须由程序侧控制停止条件，不能把“是否继续”完全交给模型。工程上同时设置最大步数、总时长、Token/费用预算、连续无进展次数和重复动作检测；任务完成、不可恢复错误、用户取消或风险门禁触发时立即结束。
+
+- 每轮记录目标、状态、动作、观察与剩余预算；只有观察带来状态变化才允许继续。
+- 对相同工具和近似参数反复调用、结果无变化、模型反复改写同一计划等情况做指纹去重并熔断。
+- 工具错误按可重试、不可重试和需人工确认分类；重试采用退避与抖动，且计入全局预算。
+- 达到上限时返回可解释的部分结果、未完成项和恢复令牌，而不是伪造成功。
+
+常见追问：最大步数如何按任务复杂度动态设置？怎样区分探索过程与无效循环？
+
+### A30. 长任务 Agent 如何持久化状态、恢复中断并保证副作用幂等？
+出现次数：6｜涉及企业：京东、字节跳动、拼多多、美团、阿里巴巴
+来源：[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[字节跳动 / 2026-09-15](https://www.nowcoder.com/discuss/1675854)、[拼多多 / 2026-09-14](https://www.nowcoder.com/discuss/1675694)
+
+参考答案：长任务恢复的核心是“状态持久化 + 幂等执行 + 可重放事件”。把任务状态机、已完成步骤、工具请求与结果、外部副作用和版本号写入持久化存储；重启后从最近一致检查点恢复，而不是重新让模型猜测进度。
+
+- 每个任务、步骤和副作用使用稳定幂等键，写操作采用唯一约束、事务消息或业务侧去重。
+- 状态更新使用乐观锁或 CAS，避免多个 Worker 同时接管造成覆盖；租约超时后才能重新认领。
+- 外部调用前记录意图，调用后记录结果；对“请求已发出但结果未知”设计查询、对账或补偿流程。
+- Prompt、模型、工具和 Schema 都要带版本，恢复时校验兼容性；不兼容则安全终止或迁移。
+
+常见追问：如何处理恰好在外部下单成功后宕机？本地状态与远端状态冲突时谁是事实源？
+
+### A31. Agent 如何建设可观测、可审计的执行轨迹与告警体系？
+出现次数：5｜涉及企业：京东、字节跳动、虾皮/Shopee、阿里巴巴
+来源：[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[虾皮/Shopee / 2026-09-13](https://www.nowcoder.com/discuss/1675408)、[字节跳动 / 2026-09-16](https://www.nowcoder.com/feed/main/detail/6d80836574e647d39eb9842dc4131ace)
+
+参考答案：Agent 可观测性应围绕一次任务的完整轨迹建设，而不是只收集应用日志。用统一 trace ID 串联模型调用、工具调用、状态转移、检索、重试和人工干预，并记录结构化输入摘要、输出、耗时、Token、费用和错误分类。
+
+- 指标至少覆盖成功率、步骤完成率、P50/P95 延迟、单位成功成本、工具错误率、重试率和安全拦截率。
+- 保留可脱敏重放的轨迹与制品版本，支持从最终坏结果定位第一个错误步骤。
+- 告警应基于 SLO 与基线偏移，区分模型、工具、数据、编排和外部依赖故障，避免只按 HTTP 500 告警。
+- 对敏感内容做字段级脱敏、访问控制和保留期限管理，不能为了可观测性泄露 Prompt 或用户数据。
+
+常见追问：怎样把一次回答错误归因到检索、模型还是工具？哪些轨迹可以安全用于回放？
+
+### A32. 通用 Agent Runtime 如何兼容不同模型厂商与能力？
+出现次数：2｜涉及企业：百度、阿里巴巴
+来源：[阿里巴巴 / 2026-09-14](https://www.nowcoder.com/discuss/1675677)、[百度 / 2026-09-16](https://www.nowcoder.com/feed/main/detail/c7f00d0e48aa4017911b46ed928d15f3)
+
+参考答案：多模型 Runtime 应把厂商差异收敛在适配层，对上提供稳定的消息、流式输出、结构化输出、工具调用、错误和用量接口。业务层依赖能力声明而不是具体模型名，路由器再按质量、时延、成本、地域和合规要求选模型。
+
+- 定义内部统一 Schema，并显式转换各厂商的 role、tool call、finish reason 和多模态格式。
+- 用 capability registry 标记上下文长度、JSON/工具能力、限流与价格；不支持的能力应明确失败或降级。
+- 统一超时、重试、熔断、并发控制和错误码，但避免对非幂等请求盲目重试。
+- 用契约测试和一组黄金轨迹验证每个适配器；切换模型时重新做质量回归，不能假定接口兼容等于行为兼容。
+
+常见追问：不同模型的工具调用语义不一致如何处理？流式响应中途失败怎样切换模型？
+
+### A33. Agent 自动化中哪些步骤应保留人工确认？
+出现次数：2｜涉及企业：华为、得物
+来源：[得物 / 2026-09-14](https://www.nowcoder.com/feed/main/detail/1215f345c83a40edaa3ced7ee9e08e37)、[华为 / 2026-09-11](https://www.nowcoder.com/feed/main/detail/415f38423022461f87767cca1a0d48f2)
+
+参考答案：人机边界应由风险、可逆性、置信度和责任要求决定：低风险、可验证、可回滚的步骤可自动执行；高影响、不可逆或证据不足的动作必须人工确认。目标不是消灭人工，而是把人工放在最有信息增益的决策点。
+
+- 先给工具和动作分级，定义自动、二次确认、双人审批与禁止四类策略。
+- 模型只提出动作意图，策略引擎根据身份、数据范围、金额、环境和风险独立授权。
+- 人工确认界面展示拟执行动作、关键参数、依据、影响范围和回滚方式，避免“同意/拒绝”黑箱。
+- 记录人工修改与拒绝原因，回流到评测集和规则，但不能未经审计直接当作训练真值。
+
+常见追问：如何减少过多确认造成的操作疲劳？何时允许系统在低置信度下自动降级？
+
+### A34. Agent 工具很多时，如何做候选召回、路由与冲突消解？
+出现次数：5｜涉及企业：字节跳动、拼多多、深信服
+来源：[深信服 / 2026-09-02](https://www.nowcoder.com/feed/main/detail/14b2c379ae434062a009aefea9fc5df9)、[拼多多 / 2026-09-14](https://www.nowcoder.com/discuss/1675694)、[字节跳动 / 2026-09-12](https://www.nowcoder.com/discuss/1675282)
+
+参考答案：工具数量变多时，不应把全部工具描述一次性塞给模型。通常先按权限和场景过滤，再用规则、语义检索或小模型召回候选工具，最后让主模型在少量候选中选择，并由程序侧校验参数与权限。
+
+- 工具注册表保存名称、能力、Schema、版本、权限、成本、延迟和健康状态；描述要区分适用与不适用边界。
+- 路由分为硬过滤、候选召回和精排三层，关键工具可设置确定性规则，避免语义相近工具冲突。
+- 用真实请求构建路由评测集，关注 Top-k 召回、最终选择准确率、误调用率和平均上下文成本。
+- 新旧工具灰度共存，调用轨迹可回放；低置信度时澄清或转人工，而不是随机试调用。
+
+常见追问：100 个工具如何控制 Prompt 长度？两个工具描述高度相似时如何消歧？
+
+### A35. 自然语言 Skill 如何版本化、测试并保证多次执行稳定？
+出现次数：2｜涉及企业：百度、美团
+来源：[美团 / 2026-09-14](https://www.nowcoder.com/discuss/1675659)、[百度 / 2026-09-15](https://www.nowcoder.com/discuss/1675802)
+
+参考答案：Skill 的稳定性来自“版本化契约 + 可重复评测 + 受控执行”，而不是要求自然语言每次逐字一致。把输入输出、依赖、权限、终止条件和失败语义写成明确契约，将开放推理限制在必要步骤。
+
+- Skill 使用语义版本，锁定模板、模型、工具和数据依赖；变更必须经过离线回归与小流量灰度。
+- 测试分为确定性单元测试、录制工具响应的轨迹回放、端到端任务集和对抗样本。
+- 多 Skill 路由单独评测，监控误路由、冲突和回退；上下文只加载候选 Skill 的详细说明。
+- 结果采用 Schema、业务不变量和外部验证器检查；随机性通过多次运行统计成功率与方差。
+
+常见追问：自然语言 Skill 如何做单元测试？换模型后怎样判断兼容？
+
 ## LLM 工程
 
 ### E1. KV Cache 是什么，为什么能加速自回归推理？
-- 出现次数：3
-- 涉及企业：阿里巴巴、百度、拼多多
-- 来源：[百度，2026-09-01](https://www.nowcoder.com/discuss/1672188)、[拼多多，2026-09-06](https://www.nowcoder.com/discuss/1673662)、[阿里巴巴，2026-09-01](https://www.nowcoder.com/discuss/1672167)
+出现次数：7｜涉及企业：字节跳动、拼多多、百度、阿里巴巴
+来源：[百度，2026-09-01](https://www.nowcoder.com/discuss/1672188)、[拼多多，2026-09-06](https://www.nowcoder.com/discuss/1673662)、[阿里巴巴，2026-09-01](https://www.nowcoder.com/discuss/1672167)、[阿里巴巴 / 2026-09-18](https://www.nowcoder.com/feed/main/detail/2b15e6dfeeeb491f97fdeeaa2c12e438)、[阿里巴巴 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/6568c432f3d84f3d89ee663a277de6dc)、[百度 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/67573119380148feb2a8a159a09aa667)
 
-**参考答案：**结论是缓存各层历史 token 的 Key/Value，使下一步只计算新 token，避免重复前向整个前缀。要点：①主要加速 decode；②容量随层数、KV head、序列长度、并发和精度线性增长；③GQA/MQA、低精度 KV、分页和前缀共享可降成本；④仍要读取全部历史 KV，长上下文依然受显存带宽约束。工程上同时测 TPOT、吞吐、KV 占用与 OOM。
+参考答案：结论是缓存各层历史 token 的 Key/Value，使下一步只计算新 token，避免重复前向整个前缀。要点：①主要加速 decode；②容量随层数、KV head、序列长度、并发和精度线性增长；③GQA/MQA、低精度 KV、分页和前缀共享可降成本；④仍要读取全部历史 KV，长上下文依然受显存带宽约束。工程上同时测 TPOT、吞吐、KV 占用与 OOM。
 
 **常见追问（合理延伸）：**GQA 为什么能减少 KV？KV Cache 与 Prompt Cache 有何不同？
 
 ### E2. PagedAttention 如何管理 KV Cache，它的收益和代价是什么？
-- 出现次数：3
-- 涉及企业：阿里巴巴、字节跳动
-- 来源：[字节跳动，2026-09-06](https://www.nowcoder.com/discuss/1673366)、[阿里巴巴，2026-09-04](https://www.nowcoder.com/discuss/1672999)、[阿里巴巴，2026-09-10](https://www.nowcoder.com/discuss/1674935)
+出现次数：3｜涉及企业：阿里巴巴、字节跳动
+来源：[字节跳动，2026-09-06](https://www.nowcoder.com/discuss/1673366)、[阿里巴巴，2026-09-04](https://www.nowcoder.com/discuss/1672999)、[阿里巴巴，2026-09-10](https://www.nowcoder.com/discuss/1674935)
 
-**参考答案：**结论是把逻辑 KV 空间切成固定 block，通过 block table 映射到非连续物理显存。要点：①无需按最大长度连续预留，减少外部碎片；②copy-on-write 可共享公共前缀；③block 太大有内部碎片，太小增加映射与元数据开销；④高利用率可能带来抢占和尾延迟。工程上联动最大上下文与并发压测，监控 block 使用率、P99、抢占和 OOM。
+参考答案：结论是把逻辑 KV 空间切成固定 block，通过 block table 映射到非连续物理显存。要点：①无需按最大长度连续预留，减少外部碎片；②copy-on-write 可共享公共前缀；③block 太大有内部碎片，太小增加映射与元数据开销；④高利用率可能带来抢占和尾延迟。工程上联动最大上下文与并发压测，监控 block 使用率、P99、抢占和 OOM。
 
 **常见追问（合理延伸）：**为什么需要 copy-on-write？block 大小如何选？
 
 ### E3. 大模型推理服务的资源瓶颈如何定位与治理？
-- 出现次数：2
-- 涉及企业：百度、字节跳动
-- 来源：[字节跳动，2026-09-06](https://www.nowcoder.com/discuss/1673366)、[百度，2026-09-08](https://www.nowcoder.com/discuss/1674313)
+出现次数：14｜涉及企业：字节跳动、携程、深信服、百度、科大讯飞、网易、美团、腾讯、蚂蚁集团、阿里巴巴
+来源：[字节跳动，2026-09-06](https://www.nowcoder.com/discuss/1673366)、[百度，2026-09-08](https://www.nowcoder.com/discuss/1674313)、[百度 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/1cec9ea24dc245438fb9f6f5d368be6b)、[科大讯飞 / 2026-09-15](https://www.nowcoder.com/feed/main/detail/1d8d5737e65d487d91fea33259fd95c1)、[网易 / 2026-09-14](https://www.nowcoder.com/discuss/1675674)
 
-**参考答案：**结论是拆分排队、prefill、decode、后处理和网络，再判断算力、显存容量/带宽、CPU、网络或调度瓶颈。要点：①prefill 偏计算，decode 偏带宽与 KV；②按输入/输出长度分桶看长尾；③批处理、量化、并行、缓存和投机解码均有精度或延迟代价；④过载必须限流背压。工程指标至少含 TTFT、TPOT、P99、tokens/s、GPU/KV 利用率和单成功请求成本。
+参考答案：结论是拆分排队、prefill、decode、后处理和网络，再判断算力、显存容量/带宽、CPU、网络或调度瓶颈。要点：①prefill 偏计算，decode 偏带宽与 KV；②按输入/输出长度分桶看长尾；③批处理、量化、并行、缓存和投机解码均有精度或延迟代价；④过载必须限流背压。工程指标至少含 TTFT、TPOT、P99、tokens/s、GPU/KV 利用率和单成功请求成本。
 
 **常见追问（合理延伸）：**吞吐升高但 P99 恶化怎么办？vLLM 与 SGLang 如何选？
 
 ### E4. vLLM 出现显存或内存泄漏时如何定位？
-- 出现次数：2
-- 涉及企业：阿里巴巴、华为
-- 来源：[阿里巴巴，2026-09-10](https://www.nowcoder.com/discuss/1674935)、[华为，2026-09-08](https://www.nowcoder.com/discuss/1674283)
+出现次数：2｜涉及企业：阿里巴巴、华为
+来源：[阿里巴巴，2026-09-10](https://www.nowcoder.com/discuss/1674935)、[华为，2026-09-08](https://www.nowcoder.com/discuss/1674283)
 
-**参考答案：**结论是先区分真泄漏、allocator 缓存、碎片和正常 KV 扩容。要点：①固定流量和长度，观察 RSS、CUDA allocated/reserved、KV block 与活跃序列；②停流同步后 allocated 回落而 reserved 不回落多为缓存/碎片；③两者不回落时排查异常中断、流式连接、future、KV 释放和热加载引用；④`empty_cache` 不是根治。工程上用最小复现、snapshot、对象增长与版本二分，修复后跑长稳压测。
+参考答案：结论是先区分真泄漏、allocator 缓存、碎片和正常 KV 扩容。要点：①固定流量和长度，观察 RSS、CUDA allocated/reserved、KV block 与活跃序列；②停流同步后 allocated 回落而 reserved 不回落多为缓存/碎片；③两者不回落时排查异常中断、流式连接、future、KV 释放和热加载引用；④`empty_cache` 不是根治。工程上用最小复现、snapshot、对象增长与版本二分，修复后跑长稳压测。
 
 **常见追问（来自原题）：**应从哪些方向排查？怎样区分正常缓存增长与泄漏？
 
 ### E5. vLLM 的队列与 Continuous Batching 如何工作？
-- 出现次数：1
-- 涉及企业：拼多多
-- 来源：[拼多多，2026-09-08](https://www.nowcoder.com/feed/main/detail/945e5869249d4f4b86d4b6460f4486dd)
+出现次数：1｜涉及企业：拼多多
+来源：[拼多多，2026-09-08](https://www.nowcoder.com/feed/main/detail/945e5869249d4f4b86d4b6460f4486dd)
 
-**参考答案：**结论是以每个迭代为调度边界：完成序列立即退出，新请求下一轮加入，减少静态批的 padding 和空转。要点：①等待/运行集合受 token budget、序列数和 KV block 约束；②prefill 计算重，decode 单步小但访存密集；③chunked prefill 避免长提示词饿死短请求；④显存不足时在重计算与换出间取舍。工程上监控队列等待、TTFT、TPOT、吞吐、抢占率和公平性。
+参考答案：结论是以每个迭代为调度边界：完成序列立即退出，新请求下一轮加入，减少静态批的 padding 和空转。要点：①等待/运行集合受 token budget、序列数和 KV block 约束；②prefill 计算重，decode 单步小但访存密集；③chunked prefill 避免长提示词饿死短请求；④显存不足时在重计算与换出间取舍。工程上监控队列等待、TTFT、TPOT、吞吐、抢占率和公平性。
 
 **常见追问（合理延伸）：**长短请求如何公平调度？抢占为何可能选重计算？
 
 ### E6. vLLM 的推理加速原理、收益与代价是什么？
-- 出现次数：1
-- 涉及企业：字节跳动
-- 来源：[字节跳动，2026-09-06](https://www.nowcoder.com/discuss/1673366)
+出现次数：1｜涉及企业：字节跳动
+来源：[字节跳动，2026-09-06](https://www.nowcoder.com/discuss/1673366)
 
-**参考答案：**结论是靠 PagedAttention、连续批处理、前缀复用和高效内核提升 KV 利用率与动态请求吞吐。要点：①适合持续到达且长度不齐的在线流量；②小流量或网络/预处理瓶颈时收益有限；③大 batch 常提升吞吐但损害 TTFT/P99；④模型、量化和分布式兼容有边界。工程验收须在同模型同精度下比较吞吐、TTFT、TPOT、P99、OOM 和成本。
+参考答案：结论是靠 PagedAttention、连续批处理、前缀复用和高效内核提升 KV 利用率与动态请求吞吐。要点：①适合持续到达且长度不齐的在线流量；②小流量或网络/预处理瓶颈时收益有限；③大 batch 常提升吞吐但损害 TTFT/P99；④模型、量化和分布式兼容有边界。工程验收须在同模型同精度下比较吞吐、TTFT、TPOT、P99、OOM 和成本。
 
 **常见追问（来自同源题）：**核心收益如何量化？PagedAttention 和批处理各解决什么？
+
+### E7. 大模型如何选型，并在云 API 与自部署之间取舍？
+出现次数：13｜涉及企业：DeepSeek、字节跳动、小红书、快手、携程、百度、科大讯飞、米哈游、网易、腾讯
+来源：[科大讯飞 / 2026-09-15](https://www.nowcoder.com/feed/main/detail/1d8d5737e65d487d91fea33259fd95c1)、[网易 / 2026-09-14](https://www.nowcoder.com/discuss/1675674)、[米哈游 / 2026-09-16](https://www.nowcoder.com/discuss/1676222)
+
+参考答案：模型选型应以任务集上的质量门槛为前提，再比较时延、吞吐、成本、上下文、工具能力、部署与合规约束。不要先按参数规模决定；能满足质量目标的最小模型通常更适合高频链路，复杂或高风险样本再路由到强模型。
+
+- 建立覆盖常见、长尾和对抗样本的评测集，测任务成功率而不只看通用榜单。
+- 在线比较 P50/P95、首 Token 时延、输出速度、单位成功成本、限流和稳定性。
+- 云 API 上线快、弹性好；自部署便于数据控制和深度优化，但承担容量、升级与运维成本。
+- 可采用级联、缓存、动态路由和降级模型，并持续监控数据漂移与模型版本变化。
+
+常见追问：何时值得自部署？小模型到大模型的升级阈值如何确定？
 
 ## LLM 应用
 
 ### L1. Agent 长链路中上下文超限时如何压缩、分层与按需回填？
-- 出现次数：28
-- 涉及企业：阿里巴巴、百度、哔哩哔哩、科大讯飞、快手、联想、美团、拼多多、腾讯、虾皮/Shopee、字节跳动、OPPO
-- 来源：[字节跳动，2026-09-09](https://www.nowcoder.com/feed/main/detail/ee6977178cc546e386791998a8d0bcf7)、[字节跳动，2026-09-07](https://www.nowcoder.com/feed/main/detail/fca85dea3f4049d0b1a175aad6e47aee)、[虾皮/Shopee，2026-09-10](https://www.nowcoder.com/discuss/1674806)
+出现次数：45｜涉及企业：OPPO、哔哩哔哩、字节跳动、快手、拼多多、携程、百度、科大讯飞、美团、联想、腾讯、虾皮/Shopee、阿里巴巴
+来源：[字节跳动，2026-09-09](https://www.nowcoder.com/feed/main/detail/ee6977178cc546e386791998a8d0bcf7)、[字节跳动，2026-09-07](https://www.nowcoder.com/feed/main/detail/fca85dea3f4049d0b1a175aad6e47aee)、[虾皮/Shopee，2026-09-10](https://www.nowcoder.com/discuss/1674806)、[携程 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/2b1c35eace4a4bb3bd88ee669f163793)、[拼多多 / 2026-09-16](https://www.nowcoder.com/feed/main/detail/3cb8b70b192f4051b3c19ace4dda1beb)、[字节跳动 / 2026-09-15](https://www.nowcoder.com/discuss/1675854)
 
-**参考答案：**结论是近期原文保细节、结构化状态保目标约束、历史摘要保脉络，大材料外置后按需回填，不能机械截断。要点：①必留目标、硬约束、已确认决策、未完成项和关键工具结果；②日志与长结果只放句柄、摘要和来源；③里程碑压缩比每轮重写更稳定；④压缩率与信息损失需权衡。工程上测事实覆盖、约束保真、决策一致性和最终成功率，并保留原文指针恢复。
+参考答案：结论是近期原文保细节、结构化状态保目标约束、历史摘要保脉络，大材料外置后按需回填，不能机械截断。要点：①必留目标、硬约束、已确认决策、未完成项和关键工具结果；②日志与长结果只放句柄、摘要和来源；③里程碑压缩比每轮重写更稳定；④压缩率与信息损失需权衡。工程上测事实覆盖、约束保真、决策一致性和最终成功率，并保留原文指针恢复。
 
 **常见追问（来自同簇证据）：**窗口增长后具体怎么压？信息丢失怎么评估？
 
 ### L2. Agent 的短期、工作与长期记忆如何分层，并实现写入、检索、更新与遗忘？
-- 出现次数：20
-- 涉及企业：阿里巴巴、百度、科大讯飞、快手、美团、拼多多、虾皮/Shopee、携程、字节跳动、MiniMax
-- 来源：[美团，2026-09-09](https://www.nowcoder.com/discuss/1674654)、[科大讯飞，2026-09-05](https://www.nowcoder.com/feed/main/detail/45369b13ca9d486e937d560a119ddfbd)、[快手，2026-09-08](https://www.nowcoder.com/feed/main/detail/4ecad43528d449c9b6619a49d8648311)
+出现次数：32｜涉及企业：MiniMax、华为、字节跳动、快手、拼多多、携程、海康威视、百度、科大讯飞、美团、虾皮/Shopee、阿里巴巴
+来源：[美团，2026-09-09](https://www.nowcoder.com/discuss/1674654)、[科大讯飞，2026-09-05](https://www.nowcoder.com/feed/main/detail/45369b13ca9d486e937d560a119ddfbd)、[快手，2026-09-08](https://www.nowcoder.com/feed/main/detail/4ecad43528d449c9b6619a49d8648311)、[华为 / 2026-09-16](https://www.nowcoder.com/discuss/1676229)、[快手 / 2026-09-16](https://www.nowcoder.com/feed/main/detail/5089cbce54834a7bb57ae2c69b7b9a89)、[科大讯飞 / 2026-09-14](https://www.nowcoder.com/feed/main/detail/671d2fa1d7c04322837ee1f5788dd69d)
 
-**参考答案：**结论是短期存近期对话，工作记忆存当前任务状态，长期只存经授权且跨会话稳定的信息。要点：①工作层结构化记录目标、计划、约束和工具结果；②长期写入前做抽取、去重、来源/时间/置信度与隐私检查；③检索结合权限、实体、时效、关键词和向量；④更新用版本/事件追加，遗忘支持 TTL、用户删除和衰减。工程上分离原文、事实库与索引，评测错误记忆率、过期召回和任务增益。
+参考答案：结论是短期存近期对话，工作记忆存当前任务状态，长期只存经授权且跨会话稳定的信息。要点：①工作层结构化记录目标、计划、约束和工具结果；②长期写入前做抽取、去重、来源/时间/置信度与隐私检查；③检索结合权限、实体、时效、关键词和向量；④更新用版本/事件追加，遗忘支持 TTL、用户删除和衰减。工程上分离原文、事实库与索引，评测错误记忆率、过期召回和任务增益。
 
 **常见追问（来自同簇证据）：**三层记忆怎么实现？上下文过长时如何配合？
 
 ### L3. Agent / LLM 应用的完整评测体系如何设计？
-- 出现次数：10
-- 涉及企业：阿里巴巴、百度、美团、拼多多、字节跳动
-- 来源：[阿里巴巴，2026-09-04](https://www.nowcoder.com/discuss/1672999)、[百度，2026-09-08](https://www.nowcoder.com/discuss/1674315)、[百度，2026-09-08](https://www.nowcoder.com/discuss/1674282)
+出现次数：11｜涉及企业：字节跳动、拼多多、百度、美团、阿里巴巴
+来源：[阿里巴巴，2026-09-04](https://www.nowcoder.com/discuss/1672999)、[百度，2026-09-08](https://www.nowcoder.com/discuss/1674315)、[百度，2026-09-08](https://www.nowcoder.com/discuss/1674282)、[字节跳动 / 2026-09-18](https://www.nowcoder.com/discuss/1676803)
 
-**参考答案：**结论是分层评任务结果、执行轨迹、内容质量、工程表现和安全成本。要点：①任务层看成功率/业务 KPI；②轨迹层看计划、工具、参数和停止；③内容层看事实、完整性、引用和拒答；④工程层看 P99、恢复率和单成功成本；⑤安全层测注入与越权。离线集覆盖高频、高风险、bad case 和边界输入，线上以 trace 监控漂移，主观评分用 rubric 与人工校准 Judge。
+参考答案：结论是分层评任务结果、执行轨迹、内容质量、工程表现和安全成本。要点：①任务层看成功率/业务 KPI；②轨迹层看计划、工具、参数和停止；③内容层看事实、完整性、引用和拒答；④工程层看 P99、恢复率和单成功成本；⑤安全层测注入与越权。离线集覆盖高频、高风险、bad case 和边界输入，线上以 trace 监控漂移，主观评分用 rubric 与人工校准 Judge。
 
 **常见追问（来自同簇证据）：**非确定输出怎么测？评测集怎么构建？真实性怎么评估？
 
 ### L4. Prompt 如何做版本管理、离线评测、灰度发布与回归测试？
-- 出现次数：3
-- 涉及企业：阿里巴巴、美团、字节跳动
-- 来源：[阿里巴巴，2026-09-04](https://www.nowcoder.com/discuss/1672999)、[美团，2026-09-09](https://www.nowcoder.com/discuss/1674650)、[字节跳动，2026-09-08](https://www.nowcoder.com/discuss/1674219)
+出现次数：3｜涉及企业：阿里巴巴、美团、字节跳动
+来源：[阿里巴巴，2026-09-04](https://www.nowcoder.com/discuss/1672999)、[美团，2026-09-09](https://www.nowcoder.com/discuss/1674650)、[字节跳动，2026-09-08](https://www.nowcoder.com/discuss/1674219)
 
-**参考答案：**结论是把 Prompt 当代码：模板、变量 schema、示例、模型参数和工具依赖均版本化。要点：①离线集覆盖主流程、长尾、bad case 和攻击；②硬字段用断言，主观项用 rubric；③随机输出多次运行并报告方差；④灰度预设主指标、护栏和回滚。工程上记录渲染后 Prompt、模型/知识版本与 trace，按版本观察质量、成本、延迟和失败类型。
+参考答案：结论是把 Prompt 当代码：模板、变量 schema、示例、模型参数和工具依赖均版本化。要点：①离线集覆盖主流程、长尾、bad case 和攻击；②硬字段用断言，主观项用 rubric；③随机输出多次运行并报告方差；④灰度预设主指标、护栏和回滚。工程上记录渲染后 Prompt、模型/知识版本与 trace，按版本观察质量、成本、延迟和失败类型。
 
 **常见追问（来自同簇证据）：**准确度怎么定义？上线前怎么测？模型升级为何要回归？
 
 ### L5. 如何用对照实验和数据证明模型或 Agent 的提升？
-- 出现次数：2
-- 涉及企业：阿里巴巴、美团
-- 来源：[阿里巴巴，2026-09-03](https://www.nowcoder.com/discuss/1672761)、[美团，2026-09-08](https://www.nowcoder.com/feed/main/detail/d83e5b4db2884807b5fad59eb6d98524)
+出现次数：4｜涉及企业：京东、百度、美团、阿里巴巴
+来源：[阿里巴巴，2026-09-03](https://www.nowcoder.com/discuss/1672761)、[美团，2026-09-08](https://www.nowcoder.com/feed/main/detail/d83e5b4db2884807b5fad59eb6d98524)、[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[百度 / 2026-09-15](https://www.nowcoder.com/discuss/1675802)
 
-**参考答案：**结论是冻结任务集、评分标准和其他配置，做基线、单变量消融、统计检验与线上 A/B。要点：①按场景分层报质量、成本和延迟；②非确定 Agent 重复运行并给置信区间；③线上预定义主指标、护栏和最小样本；④检查失败类型是否只是迁移。工程上保存模型、Prompt、工具、知识库和评测集版本，避免数据污染、Judge 偏差或流量差异冒充提升。
+参考答案：结论是冻结任务集、评分标准和其他配置，做基线、单变量消融、统计检验与线上 A/B。要点：①按场景分层报质量、成本和延迟；②非确定 Agent 重复运行并给置信区间；③线上预定义主指标、护栏和最小样本；④检查失败类型是否只是迁移。工程上保存模型、Prompt、工具、知识库和评测集版本，避免数据污染、Judge 偏差或流量差异冒充提升。
 
 **常见追问（来自原题）：**同模生成和评测有何风险？提升是否牺牲成本与延迟？
 
 ### L6. Agent 的系统提示词如何设计？
-- 出现次数：2
-- 涉及企业：美团、字节跳动
-- 来源：[字节跳动，2026-09-08](https://www.nowcoder.com/discuss/1674219)、[美团，2026-09-09](https://www.nowcoder.com/discuss/1674654)
+出现次数：10｜涉及企业：DeepSeek、字节跳动、得物、网易、美团
+来源：[字节跳动，2026-09-08](https://www.nowcoder.com/discuss/1674219)、[美团，2026-09-09](https://www.nowcoder.com/discuss/1674654)、[得物 / 2026-09-12](https://www.nowcoder.com/feed/main/detail/13fb5808e2fe4bb8b2117b6470dcb261)、[字节跳动 / 2026-09-14](https://www.nowcoder.com/discuss/1675663)、[字节跳动 / 2026-09-12](https://www.nowcoder.com/discuss/1675282)
 
-**参考答案：**结论是系统提示词定义目标、硬约束、能力边界、决策流程和输出契约，但权限与安全必须由程序强制。要点：①明确何时调用、澄清、拒答和停止；②外部内容标记为不可信数据；③用 schema 和少量边界示例消歧；④避免规则冲突和过长。工程上配合服务端授权、参数校验、状态机和高风险确认，版本化发布并回归指令遵守、工具选择与注入攻击。
+参考答案：结论是系统提示词定义目标、硬约束、能力边界、决策流程和输出契约，但权限与安全必须由程序强制。要点：①明确何时调用、澄清、拒答和停止；②外部内容标记为不可信数据；③用 schema 和少量边界示例消歧；④避免规则冲突和过长。工程上配合服务端授权、参数校验、状态机和高风险确认，版本化发布并回归指令遵守、工具选择与注入攻击。
 
 **常见追问（来自同簇证据）：**如何写高质量 Prompt？哪些约束必须下沉代码？
 
 ### L7. Prompt 的生成与优化目标如何定义？
-- 出现次数：2
-- 涉及企业：百度
-- 来源：[百度，2026-09-06](https://www.nowcoder.com/feed/main/detail/72858aade19d443facc870fea8bb134f)、[百度，2026-09-08](https://www.nowcoder.com/discuss/1674315)
+出现次数：4｜涉及企业：DeepSeek、百度
+来源：[百度，2026-09-06](https://www.nowcoder.com/feed/main/detail/72858aade19d443facc870fea8bb134f)、[百度，2026-09-08](https://www.nowcoder.com/discuss/1674315)、[百度 / 2026-09-15](https://www.nowcoder.com/feed/main/detail/8751dabb5880419cacbcc6cd36594377)、[DeepSeek / 2026-09-15](https://www.nowcoder.com/feed/main/detail/b408252227d7435ca0d1a5ee940fa1a7)
 
-**参考答案：**结论是先把业务目标转成可测输出契约与损失，再决定模板、检索拼装或自动优化。要点：①正确性与约束遵守为主；②事实性、安全是硬门槛；③Token、延迟与维护性是成本项；④自动搜索出的 Prompt 必须在独立集复核，防止对 Judge 过拟合。工程上记录渲染结果、版本、模型参数和实验，按失败类型迭代而非只改措辞。
+参考答案：结论是先把业务目标转成可测输出契约与损失，再决定模板、检索拼装或自动优化。要点：①正确性与约束遵守为主；②事实性、安全是硬门槛；③Token、延迟与维护性是成本项；④自动搜索出的 Prompt 必须在独立集复核，防止对 Judge 过拟合。工程上记录渲染结果、版本、模型参数和实验，按失败类型迭代而非只改措辞。
 
 **常见追问（来自同簇证据）：**Agent 收到 Prompt 后的完整流程是什么？多目标权重怎么设？
 
 ### L8. 上下文管理与记忆的边界是什么？
-- 出现次数：1
-- 涉及企业：美团
-- 来源：[美团，2026-09-09](https://www.nowcoder.com/discuss/1674651)
+出现次数：10｜涉及企业：华为、字节跳动、拼多多、携程、美团、虾皮/Shopee
+来源：[美团，2026-09-09](https://www.nowcoder.com/discuss/1674651)、[携程 / 2026-09-12](https://www.nowcoder.com/feed/main/detail/0829b30b5e4040ff91b3827ec1b53584)、[字节跳动 / 2026-09-14](https://www.nowcoder.com/discuss/1675663)、[携程 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/2b1c35eace4a4bb3bd88ee669f163793)
 
-**参考答案：**结论是记忆负责“长期保存什么”，上下文管理负责“本轮给模型看什么”。要点：①记忆存事件、事实、偏好和原文索引；②上下文还组合系统指令、当前输入、工具描述与即时检索；③记忆写入强调授权、去重、时效与删除；④上下文组装强调 token 预算、相关性、顺序和信任边界。工程上用稳定 ID 与来源连接两层，使每条信息可回溯、可删除、可解释。
+参考答案：结论是记忆负责“长期保存什么”，上下文管理负责“本轮给模型看什么”。要点：①记忆存事件、事实、偏好和原文索引；②上下文还组合系统指令、当前输入、工具描述与即时检索；③记忆写入强调授权、去重、时效与删除；④上下文组装强调 token 预算、相关性、顺序和信任边界。工程上用稳定 ID 与来源连接两层，使每条信息可回溯、可删除、可解释。
 
 **常见追问（合理延伸）：**记忆与用户当前陈述冲突时怎么办？上下文排序有何影响？
 
 ### L9. 需求模糊时，Agent 如何通过多轮对话澄清？
-- 出现次数：1
-- 涉及企业：美团
-- 来源：[美团，2026-09-08](https://www.nowcoder.com/discuss/1674280)
+出现次数：4｜涉及企业：京东、滴滴、美团
+来源：[美团，2026-09-08](https://www.nowcoder.com/discuss/1674280)、[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[美团 / 2026-09-14](https://www.nowcoder.com/discuss/1675679)、[滴滴 / 2026-09-14](https://www.nowcoder.com/discuss/1675675)
 
-**参考答案：**结论是识别完成任务的最小关键槽位，每轮问信息增益最高且易回答的问题，达到安全执行条件即停止。要点：①先问地点、硬限制等决定性信息；②已有上下文能推断的不重复问；③追问准确性与体验需权衡；④低风险可明示假设给候选，高风险不可逆动作必须确认。工程上结构化保存槽位、置信度和未决项，设置轮次预算并支持用户纠正。
+参考答案：结论是识别完成任务的最小关键槽位，每轮问信息增益最高且易回答的问题，达到安全执行条件即停止。要点：①先问地点、硬限制等决定性信息；②已有上下文能推断的不重复问；③追问准确性与体验需权衡；④低风险可明示假设给候选，高风险不可逆动作必须确认。工程上结构化保存槽位、置信度和未决项，设置轮次预算并支持用户纠正。
 
 **常见追问（来自原题）：**每轮问什么？如何判断澄清完成？用户拒绝补充怎么办？
 
 ### L10. 用 PPO 训练多轮对话 Agent 时，Reward 如何设计？
-- 出现次数：1
-- 涉及企业：腾讯
-- 来源：[腾讯，2026-09-09](https://www.nowcoder.com/discuss/1674599)
+出现次数：1｜涉及企业：腾讯
+来源：[腾讯，2026-09-09](https://www.nowcoder.com/discuss/1674599)
 
-**参考答案：**结论是以最终任务成功为主奖励，用少量可验证过程奖励缓解稀疏反馈，并加入安全、成本和 KL 约束。要点：①结果奖励看任务状态和用户约束；②过程奖励覆盖有效澄清、正确工具和里程碑；③过程权重过大会诱导刷步骤，纯结果又难以归因；④优先用程序可验证信号并审计 reward model 偏差。工程上先 SFT 得到稳定策略，再离线回放和小流量验证 reward hacking。
+参考答案：结论是以最终任务成功为主奖励，用少量可验证过程奖励缓解稀疏反馈，并加入安全、成本和 KL 约束。要点：①结果奖励看任务状态和用户约束；②过程奖励覆盖有效澄清、正确工具和里程碑；③过程权重过大会诱导刷步骤，纯结果又难以归因；④优先用程序可验证信号并审计 reward model 偏差。工程上先 SFT 得到稳定策略，再离线回放和小流量验证 reward hacking。
 
 **常见追问（来自原题）：**过程与结果奖励哪个更重要？如何做 credit assignment？
 
 ### L11. Agent 评测体系、评测集覆盖与主观性 Ground Truth 如何设计？
-- 出现次数：1
-- 涉及企业：DeepSeek
-- 来源：[DeepSeek，2026-09-08](https://www.nowcoder.com/discuss/1674285)
+出现次数：7｜涉及企业：DeepSeek、京东、字节跳动、小红书、百度、腾讯
+来源：[DeepSeek，2026-09-08](https://www.nowcoder.com/discuss/1674285)、[腾讯 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/12909ba0b0cf46e4b64b37c5f51228fb)、[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[百度 / 2026-09-16](https://www.nowcoder.com/feed/main/detail/4f6c877d6c8843d78d5f7e5926dd2fde)
 
-**参考答案：**结论是以场景分层的任务集加分维度 rubric 构建评测，主观 case 不强求唯一标准答案。要点：①覆盖高频、高风险、长尾、bad case 和对抗输入；②客观题用环境状态/硬断言；③主观题定义必要事实、可接受范围和禁止行为，多人标注并统计一致性；④LLM Judge 只做规模化初评，需人工集校准偏置。工程上版本化 case、标注、模型与 Prompt，并防测试泄漏、重复样本和线上分布漂移。
+参考答案：结论是以场景分层的任务集加分维度 rubric 构建评测，主观 case 不强求唯一标准答案。要点：①覆盖高频、高风险、长尾、bad case 和对抗输入；②客观题用环境状态/硬断言；③主观题定义必要事实、可接受范围和禁止行为，多人标注并统计一致性；④LLM Judge 只做规模化初评，需人工集校准偏置。工程上版本化 case、标注、模型与 Prompt，并防测试泄漏、重复样本和线上分布漂移。
 
 **常见追问（来自原题）：**评测集覆盖多少场景？30% case 有主观性怎么处理？
 
 ### L12. Agent Badcase 如何回流到评测与优化闭环，而非直接将失败轨迹用于 SFT？
-- 出现次数：1
-- 涉及企业：DeepSeek
-- 来源：[DeepSeek，2026-09-08](https://www.nowcoder.com/discuss/1674285)
+出现次数：2｜涉及企业：DeepSeek、字节跳动
+来源：[DeepSeek，2026-09-08](https://www.nowcoder.com/discuss/1674285)、[字节跳动 / 2026-09-15](https://www.nowcoder.com/feed/main/detail/ed5e9d17f26e489da94afbf1241b885e)
 
-**参考答案：**结论是先定位首个错误节点和根因，再决定修数据、检索、Prompt、工具、策略或训练；失败轨迹不能原样做 SFT。要点：①用 trace 重放并按错误类型标注；②失败动作会污染监督信号，应重建正确轨迹或只保留有效前缀；③修复后加入去重的回归集并验证无旁路退化；④训练前做脱敏、质量审查和数据版本管理。工程闭环应跟踪 badcase→根因→修复→回归→线上指标，避免同一问题反复出现。
+参考答案：结论是先定位首个错误节点和根因，再决定修数据、检索、Prompt、工具、策略或训练；失败轨迹不能原样做 SFT。要点：①用 trace 重放并按错误类型标注；②失败动作会污染监督信号，应重建正确轨迹或只保留有效前缀；③修复后加入去重的回归集并验证无旁路退化；④训练前做脱敏、质量审查和数据版本管理。工程闭环应跟踪 badcase→根因→修复→回归→线上指标，避免同一问题反复出现。
 
 **常见追问（来自原题）：**直接用失败轨迹 SFT 有什么问题？完整回流链路是什么？
 
 ### L13. RoPE 在长上下文中为什么会退化，常见扩展方案如何取舍？
-- 出现次数：1
-- 涉及企业：百度
-- 来源：[百度，2026-09-08](https://www.nowcoder.com/discuss/1674313)
+出现次数：1｜涉及企业：百度
+来源：[百度，2026-09-08](https://www.nowcoder.com/discuss/1674313)
 
-**参考答案：**结论是 RoPE 用随位置旋转的相位把相对位置信息注入 Q/K；超过训练长度后相位分布外推，模型未见过的频率组合会导致注意力定位和远距离关系退化。要点：①直接外推最简单但质量下降明显；②位置插值稳定但压缩短距离分辨率；③NTK-aware、YaRN 等按频率缩放，需结合继续训练/微调；④窗口扩大还带来注意力计算和 KV 成本。工程上按长度与任务类型评 passkey、长文 QA、中间信息和短上下文回归，而非只看困惑度。
+参考答案：结论是 RoPE 用随位置旋转的相位把相对位置信息注入 Q/K；超过训练长度后相位分布外推，模型未见过的频率组合会导致注意力定位和远距离关系退化。要点：①直接外推最简单但质量下降明显；②位置插值稳定但压缩短距离分辨率；③NTK-aware、YaRN 等按频率缩放，需结合继续训练/微调；④窗口扩大还带来注意力计算和 KV 成本。工程上按长度与任务类型评 passkey、长文 QA、中间信息和短上下文回归，而非只看困惑度。
 
 **常见追问（来自原题）：**RoPE 核心原理是什么？扩窗后为什么仍会“中间丢失”？
+
+### L14. 大模型与 Agent 的幻觉应如何分层治理？
+出现次数：9｜涉及企业：字节跳动、小红书、携程、百度、科大讯飞、米哈游、网易、美团、腾讯
+来源：[科大讯飞 / 2026-09-15](https://www.nowcoder.com/feed/main/detail/1d8d5737e65d487d91fea33259fd95c1)、[网易 / 2026-09-17](https://www.nowcoder.com/feed/main/detail/306d2b12d5bb4572b1b15f9ba3338819)、[美团 / 2026-09-15](https://www.nowcoder.com/feed/main/detail/50bcdc47e7754aa7be59b6318fea514b)
+
+参考答案：幻觉无法靠一条 Prompt 消除，应从数据、检索、生成、工具、验证和产品交互多层治理。先按“无依据、依据冲突、推理错误、工具结果误用”分类，再针对首个错误环节处理。
+
+- 对事实型问题优先提供可追溯证据，要求答案绑定引用，并验证引用是否真正支持结论。
+- 使用结构化输出、约束解码、业务规则和确定性计算器约束可验证部分；高风险结论增加二次校验或人工审批。
+- 通过置信度校准、缺失信息检测和拒答策略，让系统在证据不足时明确说不知道。
+- 用真实坏例持续构建离线集，分别测事实性、引用忠实度、拒答准确率和业务危害，线上监控但不把用户反馈直接当真值。
+
+常见追问：RAG 后仍然幻觉怎么办？怎样评估“会拒答”而不是“过度拒答”？
+
+### L15. 使用 LLM-as-a-Judge 时如何评估并降低评分偏差？
+出现次数：1｜涉及企业：字节跳动
+来源：[字节跳动 / 2026-09-18](https://www.nowcoder.com/discuss/1676801)
+
+参考答案：LLM-as-a-Judge 适合评估开放式输出，但必须先证明它与人工标准一致。应给出清晰 rubric、隐藏参考答案或证据，采用盲评与位置随机化，并用人工标注集校准偏差。
+
+- 用成对比较降低绝对打分漂移，同时交换答案顺序检测位置偏差。
+- 对长度、文风、自我偏好和模型家族偏好做分层分析；必要时使用多个异构 Judge 投票。
+- 定期计算与人工的一致率、相关系数和分项混淆矩阵，对低一致样本进入人工复核。
+- Judge 只作为证据之一；安全、事实和结构约束优先使用确定性验证器。
+
+常见追问：Judge 与被评模型同源会有什么风险？怎样防止候选答案注入评审指令？
 
 ## RAG 与知识工程
 
 ### R1. RAG 的召回、重排与答案效果如何评估？
+出现次数：18｜涉及企业：字节跳动、快手、携程、深信服、滴滴、百度、美团、虾皮/Shopee、阿里巴巴、顺丰
+来源：[滴滴·2026-09-06](https://www.nowcoder.com/discuss/1673370) · [美团·2026-09-09](https://www.nowcoder.com/discuss/1674652) · [阿里巴巴·2026-09-08](https://www.nowcoder.com/feed/main/detail/ed25d2f60ddc4436b0139a7c52e62a61)、[虾皮/Shopee / 2026-09-13](https://www.nowcoder.com/discuss/1675408)、[字节跳动 / 2026-09-16](https://www.nowcoder.com/discuss/1676094)、[字节跳动 / 2026-09-15](https://www.nowcoder.com/discuss/1675785)
 
-**元数据：**出现 9 次；涉及企业：阿里巴巴、百度、滴滴、美团、携程、字节跳动。
-
-**参考答案：**应建立“召回→重排→上下文→生成”的分层评测，不能用一个端到端总分掩盖故障环节。
+参考答案：应建立“召回→重排→上下文→生成”的分层评测，不能用一个端到端总分掩盖故障环节。
 
 - 标注集包含问题、Gold Chunk/文档、可接受答案、引用和不可答标记；按业务、难度、时效性和权限场景分层。
 - 召回看 Recall@K、Hit Rate、MRR 和证据覆盖率；重排看 nDCG@K、MRR、正例前移幅度，同时计入延迟。
@@ -671,13 +780,11 @@
 
 **常见追问（延伸）：**如何证明 Recall@K 提升真正改善了答案？
 
-**来源：**[滴滴·2026-09-06](https://www.nowcoder.com/discuss/1673370) · [美团·2026-09-09](https://www.nowcoder.com/discuss/1674652) · [阿里巴巴·2026-09-08](https://www.nowcoder.com/feed/main/detail/ed25d2f60ddc4436b0139a7c52e62a61)
-
 ### R2. RAG 的作用、原理与端到端流程是什么？
+出现次数：20｜涉及企业：华为、哔哩哔哩、字节跳动、快手、百度、美团、虾皮/Shopee、蚂蚁集团
+来源：[字节跳动·2026-09-03](https://www.nowcoder.com/feed/main/detail/bdebbb6088b6405e9eb2bd2c345acb6e) · [虾皮/Shopee·2026-09-06](https://www.nowcoder.com/feed/main/detail/409dc8793a7b450eb51ee32c2b923d49) · [华为·2026-09-09](https://www.nowcoder.com/discuss/1674640)、[华为 / 2026-09-11](https://www.nowcoder.com/feed/main/detail/415f38423022461f87767cca1a0d48f2)、[快手 / 2026-09-16](https://www.nowcoder.com/feed/main/detail/5089cbce54834a7bb57ae2c69b7b9a89)、[字节跳动 / 2026-09-12](https://www.nowcoder.com/discuss/1675282)
 
-**元数据：**出现 9 次；涉及企业：百度、哔哩哔哩、华为、美团、虾皮/Shopee、字节跳动。
-
-**参考答案：**RAG 在生成前取回外部可引用证据，把易变事实与模型参数解耦；它改善新鲜度与可追溯性，但不会自动消除幻觉。
+参考答案：RAG 在生成前取回外部可引用证据，把易变事实与模型参数解耦；它改善新鲜度与可追溯性，但不会自动消除幻觉。
 
 - 离线：数据接入、解析清洗、结构/语义切分、元数据与 ACL、Embedding、向量与倒排索引。
 - 在线：查询规范化/改写、权限预过滤、稀疏与稠密召回、融合去重、Rerank。
@@ -686,13 +793,11 @@
 
 **常见追问（延伸）：**离线建库与在线查询的瓶颈分别在哪里？
 
-**来源：**[字节跳动·2026-09-03](https://www.nowcoder.com/feed/main/detail/bdebbb6088b6405e9eb2bd2c345acb6e) · [虾皮/Shopee·2026-09-06](https://www.nowcoder.com/feed/main/detail/409dc8793a7b450eb51ee32c2b923d49) · [华为·2026-09-09](https://www.nowcoder.com/discuss/1674640)
-
 ### R3. 企业 RAG 知识库应如何设计与实现？
+出现次数：14｜涉及企业：京东、字节跳动、小红书、得物、拼多多、深信服、滴滴、科大讯飞、网易、美团、虾皮/Shopee
+来源：[拼多多·2026-09-03](https://www.nowcoder.com/feed/main/detail/2109cf8eb0254507911fbf86bcbf51e4) · [拼多多·2026-09-06](https://www.nowcoder.com/discuss/1673655) · [拼多多·2026-09-08](https://www.nowcoder.com/discuss/1674279)、[得物 / 2026-09-14](https://www.nowcoder.com/feed/main/detail/1215f345c83a40edaa3ced7ee9e08e37)、[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[网易 / 2026-09-14](https://www.nowcoder.com/discuss/1675674)
 
-**元数据：**出现 5 次；涉及企业：科大讯飞、美团、拼多多。
-
-**参考答案：**企业 RAG 的核心是兼顾可检索性、权限、新鲜度、可评测性和可追溯性的生产链路，而非只选一个向量库。
+参考答案：企业 RAG 的核心是兼顾可检索性、权限、新鲜度、可评测性和可追溯性的生产链路，而非只选一个向量库。
 
 - 先定义问题边界、数据源、引用/拒答要求、时效性、延迟和成本 SLO，再选切分、索引和模型。
 - 离线支持多格式解析、去重、结构切分、ACL、混合索引与增量更新；在线支持按需检索、重排、引用和拒答。
@@ -701,13 +806,11 @@
 
 **原帖追问：**检索什么时机触发？调优前后的召回率变化如何？
 
-**来源：**[拼多多·2026-09-03](https://www.nowcoder.com/feed/main/detail/2109cf8eb0254507911fbf86bcbf51e4) · [拼多多·2026-09-06](https://www.nowcoder.com/discuss/1673655) · [拼多多·2026-09-08](https://www.nowcoder.com/discuss/1674279)
-
 ### R4. 文档如何动态切分并避免破坏上下文？
+出现次数：8｜涉及企业：华为、快手、拼多多、百度、美团、蚂蚁集团、阿里巴巴
+来源：[拼多多·2026-09-08](https://www.nowcoder.com/discuss/1674279) · [阿里巴巴·2026-09-07](https://www.nowcoder.com/discuss/1673957) · [蚂蚁集团·2026-09-10](https://www.nowcoder.com/discuss/1674938)、[华为 / 2026-09-18](https://www.nowcoder.com/feed/main/detail/204c3ada219744f09bac7bd82aee585f)、[快手 / 2026-09-16](https://www.nowcoder.com/feed/main/detail/5089cbce54834a7bb57ae2c69b7b9a89)、[美团 / 2026-09-12](https://www.nowcoder.com/discuss/1675285)
 
-**元数据：**出现 5 次；涉及企业：阿里巴巴、百度、蚂蚁集团、美团、拼多多。
-
-**参考答案：**先尊重文档结构和语义边界，再用 Token 上限和 overlap 兜底；“动态”是按文档类型与检索任务选粒度。
+参考答案：先尊重文档结构和语义边界，再用 Token 上限和 overlap 兜底；“动态”是按文档类型与检索任务选粒度。
 
 - 按标题、段落、列表、表格、代码块和页面自然边界切，过大节点再递归拆分。
 - 用父子 Chunk：小块精准召回，命中后回填父节点/相邻片段；保留标题路径、页码和邻接关系。
@@ -716,13 +819,11 @@
 
 **原帖追问：**文档同时包含公开和敏感信息时，如何处理切分与权限冲突？
 
-**来源：**[拼多多·2026-09-08](https://www.nowcoder.com/discuss/1674279) · [阿里巴巴·2026-09-07](https://www.nowcoder.com/discuss/1673957) · [蚂蚁集团·2026-09-10](https://www.nowcoder.com/discuss/1674938)
-
 ### R5. RAG 召回不相关时，如何优化 Query Rewrite、混合召回与重排？
+出现次数：15｜涉及企业：京东、字节跳动、快手、拼多多、美团、虾皮/Shopee、阿里巴巴
+来源：[美团·2026-09-04](https://www.nowcoder.com/discuss/1673092) · [美团·2026-09-03](https://www.nowcoder.com/discuss/1672746) · [美团·2026-09-06](https://www.nowcoder.com/discuss/1673654)、[字节跳动 / 2026-09-14](https://www.nowcoder.com/discuss/1675663)、[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[拼多多 / 2026-09-14](https://www.nowcoder.com/discuss/1675694)
 
-**元数据：**出现 4 次；涉及企业：美团、字节跳动。
-
-**参考答案：**先用 trace 判断是改写偏离、单路召回缺陷还是重排错排，再对症调整，不要同时改所有环节。
+参考答案：先用 trace 判断是改写偏离、单路召回缺陷还是重排错排，再对症调整，不要同时改所有环节。
 
 - Rewrite 保留原始意图、实体、时间、否定和约束，生成规范化查询/子查询时以原查询兜底。
 - BM25 擅长编号和专名，向量检索擅长语义改写；用 RRF 融合排名，避免直比不同分数空间。
@@ -731,13 +832,11 @@
 
 **常见追问（延伸）：**Rewrite 后召回变好但答案变差，怎么排查？
 
-**来源：**[美团·2026-09-04](https://www.nowcoder.com/discuss/1673092) · [美团·2026-09-03](https://www.nowcoder.com/discuss/1672746) · [美团·2026-09-06](https://www.nowcoder.com/discuss/1673654)
-
 ### R6. 知识库如何增量更新、版本化并保持新鲜？
+出现次数：10｜涉及企业：快手、拼多多、科大讯飞、网易、美团、虾皮/Shopee、阿里巴巴
+来源：[虾皮/Shopee·2026-09-10](https://www.nowcoder.com/discuss/1674932) · [阿里巴巴·2026-09-04](https://www.nowcoder.com/discuss/1672999) · [美团·2026-09-09](https://www.nowcoder.com/discuss/1674652)、[网易 / 2026-09-14](https://www.nowcoder.com/discuss/1675674)、[拼多多 / 2026-09-14](https://www.nowcoder.com/discuss/1675694)、[美团 / 2026-09-15](https://www.nowcoder.com/feed/main/detail/50bcdc47e7754aa7be59b6318fea514b)
 
-**元数据：**出现 3 次；涉及企业：阿里巴巴、美团、虾皮/Shopee。
-
-**参考答案：**用变更事件驱动增量解析和建索引，新版验证后原子切换，检索时以版本和生效时间过滤。
+参考答案：用变更事件驱动增量解析和建索引，新版验证后原子切换，检索时以版本和生效时间过滤。
 
 - 文档/Chunk 保留稳定 ID、哈希、版本、生效/失效时间、ACL 和删除标记。
 - 变更进队列并幂等 upsert，仅重算受影响内容；删除先墓碑标记再延迟清理。
@@ -746,13 +845,11 @@
 
 **常见追问（延伸）：**文档已删除但缓存仍命中时怎么办？
 
-**来源：**[虾皮/Shopee·2026-09-10](https://www.nowcoder.com/discuss/1674932) · [阿里巴巴·2026-09-04](https://www.nowcoder.com/discuss/1672999) · [美团·2026-09-09](https://www.nowcoder.com/discuss/1674652)
-
 ### R7. 知识存在但未召回时，如何分层排查 RAG？
+出现次数：7｜涉及企业：京东、字节跳动、快手、拼多多、百度、网易、美团
+来源：[百度·2026-09-08](https://www.nowcoder.com/discuss/1674313) · [美团·2026-09-09](https://www.nowcoder.com/discuss/1674600)、[京东 / 2026-09-14](https://www.nowcoder.com/discuss/1675670)、[网易 / 2026-09-14](https://www.nowcoder.com/discuss/1675674)、[拼多多 / 2026-09-14](https://www.nowcoder.com/discuss/1675694)
 
-**元数据：**出现 2 次；涉及企业：百度、美团。
-
-**参考答案：**用确定的 Gold Chunk 按“接入→解析切分→索引→查询→过滤→召回→重排”回放，找到证据首次丢失的环节。
+参考答案：用确定的 Gold Chunk 按“接入→解析切分→索引→查询→过滤→召回→重排”回放，找到证据首次丢失的环节。
 
 - 按文档 ID 确认正确租户/版本已入库，解析文本未丢失，Chunk 含答案且元数据、ACL 正确。
 - 分别直调 BM25 和向量检索，检查规范化、Embedding 模型/维度/版本、索引刷新与分数分布。
@@ -761,13 +858,11 @@
 
 **常见追问（延伸）：**正确文档已在 Top-K 但答案仍错，下一步怎么排查？
 
-**来源：**[百度·2026-09-08](https://www.nowcoder.com/discuss/1674313) · [美团·2026-09-09](https://www.nowcoder.com/discuss/1674600)
-
 ### R8. GraphRAG 与传统 RAG 有什么区别，分别适合哪些场景？
+出现次数：2｜涉及企业：字节跳动、百度
+来源：[百度·2026-09-08](https://www.nowcoder.com/discuss/1674315)、[字节跳动 / 2026-09-17](https://www.nowcoder.com/discuss/1676554)
 
-**元数据：**出现 1 次；涉及企业：百度。
-
-**参考答案：**传统 RAG 以 Chunk 相似检索为主，成本低、更新简单；GraphRAG 显式建模实体与关系，擅长跨文档聚合和多跳问题，但建图和维护更贵。
+参考答案：传统 RAG 以 Chunk 相似检索为主，成本低、更新简单；GraphRAG 显式建模实体与关系，擅长跨文档聚合和多跳问题，但建图和维护更贵。
 
 - 传统 RAG 依赖词面/向量相似性；GraphRAG 用实体、关系、社区及摘要沿边扩展证据。
 - 单文档事实、规章查询和时效内容优先传统 RAG；关系密集、跨文档归因、全局主题更值得 GraphRAG。
@@ -776,13 +871,11 @@
 
 **常见追问（延伸）：**多跳问题一定需要 GraphRAG 吗？
 
-**来源：**[百度·2026-09-08](https://www.nowcoder.com/discuss/1674315)
-
 ### R9. Prompt、RAG 与微调分别适合解决什么问题，如何选型？
+出现次数：2｜涉及企业：小红书、阿里巴巴
+来源：[阿里巴巴·2026-09-02](https://www.nowcoder.com/discuss/1672330)、[小红书 / 2026-09-14](https://www.nowcoder.com/discuss/1675672)
 
-**元数据：**出现 1 次；涉及企业：阿里巴巴。
-
-**参考答案：**先判断要改的是行为、知识还是稳定能力：Prompt 约束行为与格式，RAG 注入动态可引用知识，微调改变稳定能力或风格；三者并非互斥。
+参考答案：先判断要改的是行为、知识还是稳定能力：Prompt 约束行为与格式，RAG 注入动态可引用知识，微调改变稳定能力或风格；三者并非互斥。
 
 - Prompt 迭代快、成本低，适合任务说明、少量示例、输出 Schema 和护栏，但不适合承载大量易变事实。
 - RAG 适合企业私有、需引用、需权限控制且频繁更新的知识，代价是建库与检索调优复杂度。
@@ -791,10 +884,32 @@
 
 **常见追问（延伸）：**RAG 已召回正确证据但模型不会用，先改 Prompt 还是微调？
 
-**来源：**[阿里巴巴·2026-09-02](https://www.nowcoder.com/discuss/1672330)
+### R10. 向量检索、关键词检索与索引结构如何选型？
+出现次数：5｜涉及企业：字节跳动、拼多多、滴滴、阿里巴巴
+来源：[拼多多 / 2026-09-14](https://www.nowcoder.com/discuss/1675694)、[拼多多 / 2026-09-12](https://www.nowcoder.com/feed/main/detail/9c22ace032b44a1b8ab1b8f47c96b10e)、[阿里巴巴 / 2026-09-14](https://www.nowcoder.com/feed/main/detail/c741b8f660b54db7bdbb77e4b81151bf)
 
----
+参考答案：向量检索把文本映射到稠密向量并按距离找近邻，适合语义相似；关键词检索擅长精确实体、编号和稀有词。生产 RAG 通常采用混合召回，再用 RRF 或学习排序融合，并由 Reranker 精排。
+
+- HNSW 查询快、召回高但内存占用大且构建成本高；IVF/PQ 更省空间，需在探针数、压缩率与召回率间权衡。
+- 选择 Embedding 要用本领域查询—文档对评测，关注维度、语言、长度、许可证和推理成本。
+- 索引必须保存文档版本、权限和元数据过滤；距离高不等于证据足够，最终还要做相关性与支持性判断。
+- 模型升级采用双写、后台重建、影子流量和原子切换，避免新旧向量混用。
+
+常见追问：HNSW 与 IVF 如何选择？Embedding 升级如何不停机迁移？
+
+### R11. PDF、Word、表格等复杂文档如何解析、切分与检索？
+出现次数：2｜涉及企业：海康威视、腾讯
+来源：[腾讯 / 2026-09-14](https://www.nowcoder.com/discuss/1675678)、[海康威视 / 2026-09-13](https://www.nowcoder.com/discuss/1675405)
+
+参考答案：复杂文档解析应保留“内容 + 结构 + 位置 + 来源”四类信息，不能只抽纯文本。先识别版面、标题层级、段落、表格、图片和页码，再按结构单元切分，并为每个块保存父子关系和原始坐标。
+
+- PDF 先判断文本层、扫描件和混合版面；扫描件使用 OCR，并记录置信度和阅读顺序。
+- 表格保留表头、行列关系与跨页信息，可同时生成结构化 JSON 和便于检索的文本表示。
+- 检索时可先召回章节或表格，再扩展相邻块与父标题；回答引用回原页和区域便于核验。
+- 用文档级测试集评估解析完整率、顺序正确率、表格还原率、召回与最终回答，低置信解析进入人工处理。
+
+常见追问：跨页表格如何处理？标题命中但答案在正文时如何扩展上下文？
 
 ## 使用建议
 
-先按出现次数准备高频主题，再结合自己的项目把答案改写成“场景—方案—权衡—指标—复盘”。涉及安全、评测和生产化的问题，建议准备一段真实故障或坏例子，说明你如何定位、止损和建立长期机制。
+按“直接结论—机制—权衡—工程落地—追问”复述答案，并结合自己的项目补充真实数据、职责边界与失败案例。不要背诵来源帖措辞；面试时应明确哪些是亲自实现、哪些是调研或团队能力。
