@@ -17,6 +17,16 @@
     "endInclusive": "2026-09-30",
     "incrementalUntilMonthEnd": true
   },
+  "incremental": {
+    "checkpointThrough": "2026-09-11",
+    "backfillCompaniesFromWindowStart": [
+      "比亚迪",
+      "中国移动",
+      "中国联通",
+      "中国电信",
+      "深信服"
+    ]
+  },
   "deduplication": {
     "url": true,
     "contentFingerprint": true,

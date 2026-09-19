@@ -24,6 +24,14 @@ venv/
 
 # Temporary workspace; reusable tooling belongs under /tools/
 /tmp/
+/.tmp/
+
+# Generated document previews and validation renders
+/.codex-docx/
+/_docx_render*/
+
+# Generated batch exports (curated deliverables live under /output/)
+/outputs/
 
 # Superseded resume layout variants (the canonical resume files stay tracked)
 /简历_优化排版*.docx

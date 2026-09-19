@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 
@@ -95,10 +95,39 @@ def main() -> None:
     if start > end:
         raise SystemExit("window.startInclusive must not be after endInclusive")
 
+    incremental = config.get("incremental") or {}
+    checkpoint_value = incremental.get("checkpointThrough")
+    checkpoint_through = (
+        parse_day(checkpoint_value, "incremental.checkpointThrough")
+        if checkpoint_value
+        else None
+    )
+    default_incremental_start = (
+        max(start, checkpoint_through + timedelta(days=1))
+        if checkpoint_through
+        else start
+    )
+    backfill_companies = normalized_unique(
+        incremental.get("backfillCompaniesFromWindowStart", []),
+        "incremental.backfillCompaniesFromWindowStart",
+    )
+    known_companies = {company["canonical"] for company in companies}
+    unknown_backfills = sorted(set(backfill_companies) - known_companies)
+    if unknown_backfills:
+        raise SystemExit(
+            "incremental backfill companies are not enabled in registry: "
+            + ", ".join(unknown_backfills)
+        )
+
     today = date.today()
     effective_end = min(today, end)
     units = []
     for company in companies:
+        unit_start = (
+            start
+            if company["canonical"] in backfill_companies
+            else default_incremental_start
+        )
         for category in categories:
             units.append(
                 {
@@ -108,7 +137,8 @@ def main() -> None:
                     "category": category,
                     "sort": source["sort"],
                     "sourceCompanySelectionRequired": True,
-                    "collectUntilPublishedBefore": start.isoformat(),
+                    "startInclusive": unit_start.isoformat(),
+                    "collectUntilPublishedBefore": unit_start.isoformat(),
                 }
             )
 
@@ -122,6 +152,14 @@ def main() -> None:
         },
         "currentlyCollectableThrough": effective_end.isoformat(),
         "monthComplete": today > end,
+        "incrementalPolicy": {
+            "checkpointThrough": (
+                checkpoint_through.isoformat() if checkpoint_through else None
+            ),
+            "defaultStartInclusive": default_incremental_start.isoformat(),
+            "backfillStartInclusive": start.isoformat(),
+            "backfillCompanies": backfill_companies,
+        },
         "companyCount": len(companies),
         "sourceSelectorCount": sum(len(item["selectors"]) for item in companies),
         "unresolvedCompanies": [item["canonical"] for item in unresolved],

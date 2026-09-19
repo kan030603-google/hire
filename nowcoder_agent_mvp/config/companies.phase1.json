@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-09-10",
+  "verifiedAt": "2026-09-16",
   "verificationSource": "牛客面试经验页的企业选择器",
   "policy": {
     "selectorMatching": "exact-option-text",
@@ -52,6 +52,11 @@
     {"canonical":"得物","input":"得物","selectors":["上海得物信息集团有限公司"],"status":"verified","enabled":true},
     {"canonical":"地平线","input":"地平线","selectors":["地平线","北京地平线信息技术有限公司"],"status":"verified","enabled":true},
     {"canonical":"Momenta","input":"Momenta","selectors":["Momenta"],"status":"verified","enabled":true},
-    {"canonical":"英伟达","input":"英伟达","selectors":["英伟达"],"status":"verified","enabled":true}
+    {"canonical":"英伟达","input":"英伟达","selectors":["英伟达"],"status":"verified","enabled":true},
+    {"canonical":"比亚迪","input":"比亚迪","selectors":["比亚迪","比亚迪汽车工业","比亚迪汽车工程研究院","比亚迪半导体股份有限公司"],"status":"verified","enabled":true},
+    {"canonical":"中国移动","input":"中国移动","selectors":["中国移动研究院","中移(苏州)软件技术有限公司","中国移动北京"],"status":"verified","enabled":true},
+    {"canonical":"中国联通","input":"中国联通","selectors":["中国联通","中国联通研究院"],"status":"verified","enabled":true},
+    {"canonical":"中国电信","input":"中国电信","selectors":["中国电信人工智能研究院","中国电信数字智能科技分公司","中国电信-天翼云","天翼云科技有限公司","中国电信广东亿迅科技"],"status":"verified","enabled":true},
+    {"canonical":"深信服","input":"深信服","selectors":["深信服","深信服科技"],"status":"verified","enabled":true}
   ]
 }

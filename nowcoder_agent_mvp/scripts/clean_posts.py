@@ -126,12 +126,21 @@ def main() -> None:
         reasons: list[str] = []
         created_at = parse_created_at(row.get("createdAt"))
         title_companies = explicit_title_companies(row.get("pageTitle", ""), aliases)
+        row_start_date = start_date
+        if row.get("collectionStartInclusive"):
+            try:
+                row_start_date = datetime.fromisoformat(
+                    row["collectionStartInclusive"]
+                ).date()
+            except ValueError:
+                reasons.append("collection-start-invalid")
+        row_start_at = datetime.combine(row_start_date, time.min, CHINA_TZ)
 
         if row.get("fetchError") or not row.get("body"):
             reasons.append("fetch-failed-or-empty")
         if created_at is None:
             reasons.append("publication-date-missing")
-        elif not start_at <= created_at <= end_at:
+        elif not row_start_at <= created_at <= end_at:
             reasons.append("outside-date-window")
         expected_company = row.get("company") if args.expected_company_from_candidate else args.expected_company
         if title_companies and expected_company not in title_companies:
@@ -178,6 +187,7 @@ def main() -> None:
             "startInclusive": start_date.isoformat(),
             "endInclusive": end_date.isoformat(),
             "timezone": "Asia/Shanghai",
+            "perRowCollectionStartInclusive": True,
         },
     }
     args.summary.parent.mkdir(parents=True, exist_ok=True)

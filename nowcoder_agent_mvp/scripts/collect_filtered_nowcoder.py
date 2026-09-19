@@ -79,6 +79,7 @@ def candidate(record: dict[str, Any], unit: dict[str, Any], selector: str) -> di
         "category": unit["category"],
         "publishedAt": published_at,
         "unitId": unit["id"],
+        "collectionStartInclusive": unit.get("startInclusive"),
     }
 
 
@@ -87,7 +88,7 @@ def initialize_status(plan: dict[str, Any]) -> dict[str, Any]:
     return {
         "planName": plan["name"],
         "generatedAt": now,
-        "sourceAccess": "pending verified UI-backed collection",
+        "sourceAccess": "Nowcoder UI-backed API; pending per-unit verification",
         "updatedAt": now,
         "units": [
             {
@@ -95,6 +96,7 @@ def initialize_status(plan: dict[str, Any]) -> dict[str, Any]:
                 "company": unit["company"],
                 "category": unit["category"],
                 "sort": unit["sort"],
+                "startInclusive": unit.get("startInclusive"),
                 "sourceCompanySelectionRequired": True,
                 "status": "pending",
                 "reason": None,
@@ -127,10 +129,8 @@ def main() -> None:
     args = parser.parse_args()
 
     plan = json.loads(PLAN_PATH.read_text(encoding="utf-8"))
-    start_date = datetime.fromisoformat(plan["targetWindow"]["startInclusive"]).date()
     configured_end = datetime.fromisoformat(plan["targetWindow"]["endInclusive"]).date()
     collectable_through = min(configured_end, datetime.now(CHINA_TZ).date())
-    start_ms = int(datetime.combine(start_date, datetime.min.time(), CHINA_TZ).timestamp() * 1000)
     end_ms = int(datetime.combine(collectable_through, datetime.max.time(), CHINA_TZ).timestamp() * 1000)
     selected_units = set(args.unit_id)
     status_doc = (
@@ -197,6 +197,15 @@ def main() -> None:
             attempts = 0
         now = datetime.now(timezone.utc).isoformat()
         try:
+            start_date = datetime.fromisoformat(
+                unit.get("startInclusive")
+                or unit.get("collectUntilPublishedBefore")
+                or plan["targetWindow"]["startInclusive"]
+            ).date()
+            start_ms = int(
+                datetime.combine(start_date, datetime.min.time(), CHINA_TZ).timestamp()
+                * 1000
+            )
             job_id, level = CATEGORIES[unit["category"]]
             ids, selector_evidence = company_ids(unit)
             collected = 0
@@ -232,6 +241,7 @@ def main() -> None:
                 page += 1
                 time.sleep(0.2)
             state.update({
+                "startInclusive": start_date.isoformat(),
                 "status": "completed",
                 "reason": f"verified source-filter query: {selector_evidence}; jobId={job_id}; level={level}; order=3 (最新); pages={page}; crossedBefore{start_date.isoformat()}={crossed_window}; collectableThrough={collectable_through.isoformat()}; candidatesInWindow={collected}",
                 "attempts": 0,
@@ -242,6 +252,10 @@ def main() -> None:
         existing["run"] = {"mode": "full", "updatedAt": now}
         existing["candidates"] = list(rows_by_url.values())
         CANDIDATES_PATH.write_text(json.dumps(existing, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        status_doc["sourceAccess"] = (
+            "verified Nowcoder UI-backed API; exact selectors and companyIds "
+            "recorded in per-unit evidence"
+        )
         status_doc["updatedAt"] = now
         STATUS_PATH.write_text(json.dumps(status_doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print(f"{unit['id']} {state['status']} {state['reason']}", flush=True)
